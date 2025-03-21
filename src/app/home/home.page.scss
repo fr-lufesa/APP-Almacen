@@ -1,0 +1,14 @@
+.left-container {
+    display: flex;
+    flex-direction: column;
+    height: 88vh;
+
+    ion-card {
+        flex: 1 1; // 🧠 Aquí está la magia
+        overflow: auto; // si tiene mucho contenido dentro
+    }
+}
+
+*{
+    text-align: center;
+}
