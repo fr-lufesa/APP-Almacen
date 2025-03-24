@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="this.modalCtrl.dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true" scroll="true" style="overflow-y: auto!important;">
+  <form [formGroup]="productForm" (ngSubmit)="set_product()">
+    <ion-item [disabled]="isDisabled">
+      <ion-label position="stacked">Nombre</ion-label>
+      <ion-input formControlName="Nombre" required placeholder="Nombre del Producto"></ion-input>
+    </ion-item>
+
+    <ion-item [disabled]="isDisabled">
+      <ion-label position="stacked">Imagen (URL)</ion-label>
+      <ion-input formControlName="Imagen"></ion-input>
+    </ion-item>
+
+    <ion-item [disabled]="isDisabled">
+      <ion-label position="stacked">Categoría</ion-label>
+      <ion-input formControlName="Categoria"></ion-input>
+    </ion-item>
+
+    <ion-item [disabled]="isDisabled">
+      <ion-label position="stacked">Unidad de Medida</ion-label>
+      <ion-input formControlName="UnidadMedida"></ion-input>
+    </ion-item>
+
+    <ion-item [disabled]="isDisabled">
+      <ion-label position="stacked">Stock Mínimo</ion-label>
+      <ion-input type="number" formControlName="StockMinimo"></ion-input>
+    </ion-item>
+
+    <ion-item [disabled]="isDisabled">
+      <ion-label position="stacked">Color</ion-label>
+      <ion-input formControlName="Color"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Nombre del usuario que hace la entrada</ion-label>
+      <ion-input formControlName="Usuario" required></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" [disabled]="productForm.invalid">
+      Guardar Producto
+    </ion-button>
+  </form>
+</ion-content>

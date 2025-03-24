@@ -5,11 +5,36 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="right: 3rem;">
+  <ion-searchbar 
+  clearIcon="close-outline" 
+  [(ngModel)]="searchTerm" 
+  (input)="searchProducts()"
+  (ionClear)="resetList()"
+  ></ion-searchbar>
+
+  <ion-list [inset]="true">
+    @for (product of productsFiletered; track $index) {
+    <ion-item-sliding>
+      <ion-item [button]="true" (click)="editStock(product)">
+        <ion-avatar aria-hidden="true" slot="start">
+          <img alt="" [src]="product.Imagen" />
+        </ion-avatar>
+        <ion-label>{{ product.Nombre }}</ion-label>
+        <!-- <ion-button slot="end">
+          <ion-icon slot="end" name="pencil" color="warning"></ion-icon>
+        </ion-button>
+        <ion-button slot="end">
+          <ion-icon slot="end" name="trash" color="danger"></ion-icon>
+        </ion-button> -->
+      </ion-item>
+    </ion-item-sliding>
+    }
+  </ion-list>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="right: 3rem;" (click)="addProduct()">
     <ion-fab-button>
-      <ion-icon name="basket" ></ion-icon>
+      <ion-icon name="add" ></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-searchbar clearIcon="close-outline"></ion-searchbar>
 </ion-content>
 
