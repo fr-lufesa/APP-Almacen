@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Product } from '../models/product_model';
+import { Product, UpdateStockResponse } from '../models/product_model';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -33,5 +33,22 @@ export class ProductsService {
 
     this.httpClient.get<Product[]>(url)
     .subscribe(products => this.productsSubject.next(products));
+  }
+
+  updateProductStock(product: { idProducto: number; cantidad: number }): string {
+    const url = this.baseUrl + 'products/update_stock';
+    let msg = "";
+
+    try {
+      this.httpClient.put<UpdateStockResponse>(url, product).subscribe(response=>{
+        this.get_products();
+        msg = response.msg;
+      })
+    } catch (error) {
+      console.log("Error al actualizar: " + error);
+      msg = "error";
+    }
+
+    return msg;
   }
 }
