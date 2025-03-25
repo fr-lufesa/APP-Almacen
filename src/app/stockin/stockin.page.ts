@@ -44,7 +44,7 @@ export class StockinPage implements OnInit {
   searchProducts(): void {
     const term = this.searchTerm.toLowerCase();
     this.productsFiletered = this.products.filter(product =>
-      product.Nombre.toLowerCase().includes(term)
+      product.nombre.toLowerCase().includes(term)
     );
   }
 

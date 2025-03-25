@@ -9,40 +9,61 @@
 
 <ion-content class="ion-padding" [fullscreen]="true" scroll="true" style="overflow-y: auto!important;">
   <form [formGroup]="productForm" (ngSubmit)="set_product()">
-    <ion-item [disabled]="isDisabled">
+
+    <ion-item>
       <ion-label position="stacked">Nombre</ion-label>
-      <ion-input formControlName="Nombre" required placeholder="Nombre del Producto"></ion-input>
-    </ion-item>
-
-    <ion-item [disabled]="isDisabled">
-      <ion-label position="stacked">Imagen (URL)</ion-label>
-      <ion-input formControlName="Imagen"></ion-input>
-    </ion-item>
-
-    <ion-item [disabled]="isDisabled">
-      <ion-label position="stacked">Categoría</ion-label>
-      <ion-input formControlName="Categoria"></ion-input>
-    </ion-item>
-
-    <ion-item [disabled]="isDisabled">
-      <ion-label position="stacked">Unidad de Medida</ion-label>
-      <ion-input formControlName="UnidadMedida"></ion-input>
-    </ion-item>
-
-    <ion-item [disabled]="isDisabled">
-      <ion-label position="stacked">Stock Mínimo</ion-label>
-      <ion-input type="number" formControlName="StockMinimo"></ion-input>
-    </ion-item>
-
-    <ion-item [disabled]="isDisabled">
-      <ion-label position="stacked">Color</ion-label>
-      <ion-input formControlName="Color"></ion-input>
+      <ion-input formControlName="nombre" required placeholder="Nombre del Producto"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Nombre del usuario que hace la entrada</ion-label>
-      <ion-input formControlName="Usuario" required></ion-input>
+      <ion-label position="stacked">Imagen (URL)</ion-label>
+      <ion-input formControlName="imagen"></ion-input>
     </ion-item>
+
+    @if(isNewProduct){
+    <ion-item>
+      <ion-label position="stacked">Categoría</ion-label>
+      <ion-select formControlName="idCategoria" placeholder="Selecciona la categoría">
+        @for (category of categories(); track $index) {
+        <ion-select-option [value]="category.id">
+          {{ category.nombre }}
+        </ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Unidad de Medida</ion-label>
+      <ion-input formControlName="unidadMedida"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Stock Mínimo</ion-label>
+      <ion-input type="number" formControlName="stockMinimo"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Color</ion-label>
+      <ion-input formControlName="color"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">Piezas en stock</ion-label>
+      <ion-input formControlName="stock" required
+        [errorText]="'No puedes reducir el stock por debajo de ' + productForm.get('Stock')?.getError('minStock')?.requiredMin"></ion-input>
+    </ion-item>
+    }
+
+    <ion-item>
+      <ion-label position="stacked">Usuario</ion-label>
+      <ion-input formControlName="usuario" required></ion-input>
+    </ion-item>
+
+    @if(product){
+    <ion-item>
+      <ion-label position="stacked">Entradas</ion-label>
+      <ion-input formControlName="entradas" required></ion-input>
+    </ion-item>
+    }
 
     <ion-button expand="block" type="submit" [disabled]="productForm.invalid">
       Guardar Producto
