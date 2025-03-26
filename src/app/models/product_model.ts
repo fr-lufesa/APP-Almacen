@@ -1,19 +1,30 @@
-export class Product {
-    idProducto!: string;
-    nombre!: string;
-    imagen!: string;
-    idCategoria!: number;
-    unidadMedida!: string;
-    stockMinimo!: 0;
+export interface IProduct {
+    idProducto: number;
+    nombre: string;
+    idCategoria?: string;
+    unidadMedida: string;
     color?: string;
-    usuario!: string;
-    stock!: number;
-    entradas?: number;
+    stockMinimo: number;
+    imagen?: string;
+    fechaCreacion?: string;
+    recibio: string;
+    stock?: number;
 }
 
 export interface UpdateStockResponse {
-
     msg: string,
-    stock_actual: number
+}
 
+export interface ProductStockOut {
+    idProducto: number;
+    nombre: string;
+    cantidad: number;
+}
+
+export interface IStockin {
+    idProducto: number;
+    cantidad: number;
+    costoUnitario: number;
+    proveedor?: string;
+    recibio?: string;
 }

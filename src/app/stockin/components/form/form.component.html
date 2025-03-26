@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true" scroll="true" style="overflow-y: auto!important;">
-  <form [formGroup]="productForm" (ngSubmit)="set_product()">
+  <form [formGroup]="productForm" (ngSubmit)="submit()">
 
     <ion-item>
       <ion-label position="stacked">Nombre</ion-label>
@@ -20,7 +20,6 @@
       <ion-input formControlName="imagen"></ion-input>
     </ion-item>
 
-    @if(isNewProduct){
     <ion-item>
       <ion-label position="stacked">Categoría</ion-label>
       <ion-select formControlName="idCategoria" placeholder="Selecciona la categoría">
@@ -46,22 +45,31 @@
       <ion-label position="stacked">Color</ion-label>
       <ion-input formControlName="color"></ion-input>
     </ion-item>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label position="stacked">Piezas en stock</ion-label>
       <ion-input formControlName="stock" required
         [errorText]="'No puedes reducir el stock por debajo de ' + productForm.get('Stock')?.getError('minStock')?.requiredMin"></ion-input>
+    </ion-item> -->
+
+    @if (isStockin || isStockout) {
+    <ion-item>
+      <ion-label position="stacked">Costo Unitario</ion-label>
+      <ion-input type="number" formControlName="costoUnitario" required></ion-input>
     </ion-item>
-    }
 
     <ion-item>
-      <ion-label position="stacked">Usuario</ion-label>
-      <ion-input formControlName="usuario" required></ion-input>
+      <ion-label position="stacked">Proveedor</ion-label>
+      <ion-input formControlName="proveedor" required></ion-input>
     </ion-item>
 
-    @if(product){
     <ion-item>
-      <ion-label position="stacked">Entradas</ion-label>
-      <ion-input formControlName="entradas" required></ion-input>
+      <ion-label position="stacked">Cantidad</ion-label>
+      <ion-input type="number" formControlName="cantidad" required></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="stacked">Recibió</ion-label>
+      <ion-input formControlName="recibio" required></ion-input>
     </ion-item>
     }
 

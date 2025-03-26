@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { StockoutPageRoutingModule } from './stockout-routing.module';
 
 import { StockoutPage } from './stockout.page';
+import { CartComponent } from './components/cart/cart.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { StockoutPage } from './stockout.page';
     IonicModule,
     StockoutPageRoutingModule
   ],
-  declarations: [StockoutPage]
+  declarations: [StockoutPage, CartComponent]
 })
 export class StockoutPageModule {}

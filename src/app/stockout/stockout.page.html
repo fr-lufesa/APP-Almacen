@@ -5,10 +5,33 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" fixed-slot-placement="before">
-  <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="right: 3rem;">
+
+  <ion-searchbar clearIcon="close-outline" [(ngModel)]="searchTerm" (input)="searchProducts()"
+    (ionClear)="resetList()"></ion-searchbar>
+
+  <ion-list [inset]="true">
+    @for (product of filteredProducts; track $index) {
+    <ion-item-sliding>
+      <ion-item [button]="true" (click)="presentAlert(product)">
+        <ion-avatar aria-hidden="true" slot="start">
+          <img alt="" [src]="product.imagen" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ product.nombre }}</h2>
+          <p>Cantidad en stock: {{ product.stock }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-item-sliding>
+    }
+  </ion-list>
+
+  <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="right: 3rem;" (click)="openCart()">
     <ion-fab-button>
-      <ion-icon name="basket" color="success"></ion-icon>
+      @if(cart().length > 0)
+      {
+      <span class="stockOut">{{ cart().length }} </span>
+      }
+      <ion-icon name="basket"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-  <ion-searchbar clearIcon="close-outline"></ion-searchbar>
 </ion-content>

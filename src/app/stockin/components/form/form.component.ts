@@ -1,8 +1,7 @@
 import { Component, inject, Input, OnInit, Signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AlertController, ModalController } from '@ionic/angular';
-import { Category } from 'src/app/models/category_model';
-import { Product } from 'src/app/models/product_model';
+import { IProduct, IStockin } from 'src/app/models/product_model';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { ProductsService } from 'src/app/services/products.service';
 
@@ -14,7 +13,11 @@ import { ProductsService } from 'src/app/services/products.service';
 })
 export class FormComponent implements OnInit {
 
-  @Input() product?: Product;
+  @Input() product?: IProduct;
+  @Input() isEdit?: boolean;
+  @Input() isNew?: boolean;
+  @Input() isStockin?: boolean;
+  @Input() isStockout?: boolean;
 
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductsService);
@@ -23,74 +26,55 @@ export class FormComponent implements OnInit {
   modalCtrl = inject(ModalController);
 
   productForm!: FormGroup;
-  title: string = "Dar de alta un producto";
-  isNewProduct: boolean = true;
+  title: string = "";
   categories = this.categoriesService.categorias;
 
   ngOnInit() {
-
-    this.categoriesService.get_categories();
-
+    if (this.isNew || this.isEdit) this.categoriesService.get_categories();
+    
     this.initializeFormGroup();
-
-    if (this.product) {
-      this.title = "Añadir Entrada";
-      this.isNewProduct = false
-      this.setFormGroup();
-    }
-
+    this.setFormGroup();
   }
 
-  set_product() {
-    if (this.productForm.valid) {
+  submit() {
+    if (!this.productForm.valid) return;
 
-      const newProduct: Product = this.productForm.value;
-
-      if (this.product) {
-        let idProducto = Number(this.product.idProducto);
-        let entradas = Number(this.productForm.get('entradas')?.value);
-
-        const msg = this.productService.updateProductStock({ idProducto: idProducto, cantidad: entradas });
-        this.modalCtrl.dismiss();
-        this.showAlert(msg);
-        return;
-      }
-
-      this.productService.set_product(newProduct);
-      this.modalCtrl.dismiss();
-
-    } else {
-      console.log('Formulario inválido');
+    if (this.isEdit) {
+      this.saveProduct();
+      return;
     }
+
+    if (this.isStockin) {
+      this.saveStockin();
+      return;
+    }
+
+    if (this.isNew) {
+      this.saveNewProduct();
+    }
+
   }
 
 
   initializeFormGroup() {
 
-    this.productForm = this.fb.group({
-      nombre: ['', Validators.required],
-      imagen: [''],
-      idCategoria: [null],
-      unidadMedida: [''],
-      stockMinimo: [, [Validators.required, Validators.min(0)]],
-      color: [''],
-      usuario: ['', Validators.required],
-      stock: [0],
-    });
+    if (this.isNew || this.isEdit) { this.initializeFormForNewProduct(); return; }
 
-    if (this.product) {
-      this.productForm.addControl('entradas', this.fb.control(null)); // opcional
-    }
+    //IF IS STOCKIN STOCKOUT
+    this.productForm.addControl('cantidad', this.fb.control(null));
+    this.productForm.addControl('proveedor', this.fb.control(null));
+    this.productForm.addControl('costoUnitario', this.fb.control(null));
 
   }
+
   setFormGroup() {
 
-    if (this.product) {
-      this.productForm.get('Stock')?.setValidators([
-        Validators.required,
-        this.minStockValidator(this.product!.stock)
-      ]);
+    // this.productForm.get('Stock')?.setValidators([
+    //   Validators.required,
+    //   this.minStockValidator(this.product!.stock!)
+    // ]);
 
+    if (this.isEdit) {
       this.productForm.patchValue({
         nombre: this.product!.nombre,
         imagen: this.product!.imagen,
@@ -98,12 +82,9 @@ export class FormComponent implements OnInit {
         unidadMedida: this.product!.unidadMedida,
         stockMinimo: this.product!.stockMinimo,
         color: this.product!.color,
-        usuario: this.product!.usuario,
-        stock: this.product!.stock,
-        entradas: 0
+        usuario: this.product!.recibio,
       })
     }
-
   }
 
   minStockValidator(minStock: number): ValidatorFn {
@@ -122,12 +103,59 @@ export class FormComponent implements OnInit {
   async showAlert(msg: string) {
     const alert = await this.alertCtrl.create({
       header: msg,
-      // subHeader: '',
-      message: 'El stock ha sido actualizado',
 
       buttons: ['Aceptar'],
     });
 
     await alert.present();
   }
+
+  initializeFormForNewProduct() {
+    this.productForm = this.fb.group({
+      nombre: ['', Validators.required],
+      imagen: [''],
+      idCategoria: [null],
+      unidadMedida: [''],
+      stockMinimo: [, [Validators.required, Validators.min(0)]],
+      color: [''],      
+    });
+  }
+
+
+  saveProduct() {
+    let newProduct = this.productForm.value;
+    newProduct.idProducto = this.product!.idProducto;
+    const msg = this.productService.editProduct(newProduct).subscribe(resp => {
+      this.showAlert(resp);
+      this.modalCtrl.dismiss();
+    })
+  }
+
+  saveStockin() {
+    let stockin: IStockin = {
+      idProducto: this.product!.idProducto,
+      cantidad: this.productForm.value.cantidad,
+      costoUnitario: this.productForm.value.costoUnitario,
+      proveedor: this.productForm.value.proveedor,
+      recibio: this.productForm.value.recibio,
+    };
+
+    this.productService.stockIn(stockin).subscribe({
+      next: (res) => {
+        this.showAlert(res.msg);
+      },
+      error: (err) => {
+        console.error('Error al actualizar stock', err);
+      }
+    })
+    this.modalCtrl.dismiss();
+  }
+
+  saveNewProduct() {
+    let newProduct = this.productForm.value;
+    this.productService.setNewProduct(newProduct);
+    this.modalCtrl.dismiss();
+  }
+
+
 }

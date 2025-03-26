@@ -9,7 +9,7 @@
     (ionClear)="resetList()"></ion-searchbar>
 
   <ion-list [inset]="true">
-    @for (product of productsFiletered; track $index) {
+    @for (product of filteredProducts; track $index) {
     <ion-item-sliding>
       <ion-item [button]="true" (click)="editStock(product)">
         <ion-avatar aria-hidden="true" slot="start">
@@ -26,8 +26,6 @@
     </ion-item-sliding>
     }
   </ion-list>
-
-  <ion-button expand="block" color="success" (click)="addProduct()">Añadir Nuevo producto <ion-icon name="add"></ion-icon></ion-button>
   <!-- <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="right: 3rem;" >
     <ion-fab-button>
       Añadir nuevo producto

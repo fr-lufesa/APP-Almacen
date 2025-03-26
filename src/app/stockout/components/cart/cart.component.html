@@ -1,0 +1,31 @@
+<ion-content [fullscreen]="false" fixed-slot-placement="before">
+  @if(cart().length > 0){
+  <ion-list>
+    <ion-item *ngFor="let item of cart()">
+      <ion-label>
+        <h2>Artículo: {{ item.nombre | uppercase}}</h2>
+        <p>Cantidad de salida: {{ item.cantidad }}</p>
+      </ion-label>
+
+      <ion-buttons slot="end">
+        <ion-button color="medium" (click)="disminuirCantidad(item)">
+          <ion-icon name="remove-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button color="primary" (click)="aumentarCantidad(item)">
+          <ion-icon name="add-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button color="danger" (click)="eliminarProducto(item.idProducto)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
+
+  <ion-button class="ion-margin-top" expand="block" color="warning">Dar Salida a Artículos</ion-button>
+
+  }@else{
+  <h3 class="ion-text-center">No hay artículos de salida</h3>
+  }
+</ion-content>

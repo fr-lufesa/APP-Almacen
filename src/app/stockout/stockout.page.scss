@@ -1,4 +1,15 @@
 ion-fab-button{
-    --box-shadow: 1px 1px 10px white;
-    --background: #fff;    
+    --box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    --background: #2E7D32;    
+    --color: #FFFFFF;    
+}
+
+
+.stockOut{
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    background-color: red;
+    border-radius: 50%;
+    width: 1rem;
 }
