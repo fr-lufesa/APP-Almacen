@@ -20,6 +20,8 @@
       <ion-input formControlName="imagen"></ion-input>
     </ion-item>
 
+    @if(isNew || isEdit){
+
     <ion-item>
       <ion-label position="stacked">Categoría</ion-label>
       <ion-select formControlName="idCategoria" placeholder="Selecciona la categoría">
@@ -45,6 +47,8 @@
       <ion-label position="stacked">Color</ion-label>
       <ion-input formControlName="color"></ion-input>
     </ion-item>
+    }
+
     <!-- <ion-item>
       <ion-label position="stacked">Piezas en stock</ion-label>
       <ion-input formControlName="stock" required
@@ -66,7 +70,7 @@
       <ion-label position="stacked">Cantidad</ion-label>
       <ion-input type="number" formControlName="cantidad" required></ion-input>
     </ion-item>
-    
+
     <ion-item>
       <ion-label position="stacked">Recibió</ion-label>
       <ion-input formControlName="recibio" required></ion-input>

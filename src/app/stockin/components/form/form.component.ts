@@ -31,7 +31,7 @@ export class FormComponent implements OnInit {
 
   ngOnInit() {
     if (this.isNew || this.isEdit) this.categoriesService.get_categories();
-    
+
     this.initializeFormGroup();
     this.setFormGroup();
   }
@@ -60,11 +60,15 @@ export class FormComponent implements OnInit {
 
     if (this.isNew || this.isEdit) { this.initializeFormForNewProduct(); return; }
 
-    //IF IS STOCKIN STOCKOUT
-    this.productForm.addControl('cantidad', this.fb.control(null));
-    this.productForm.addControl('proveedor', this.fb.control(null));
-    this.productForm.addControl('costoUnitario', this.fb.control(null));
-
+    //IF IS STOCKIN OR STOCKOUT
+    this.productForm = this.fb.group({
+      nombre: ['', Validators.required],
+      imagen: [''],
+      cantidad: [''],
+      proveedor: [''],
+      costoUnitario: [''],
+      recibio: [''],
+    });
   }
 
   setFormGroup() {
@@ -84,7 +88,16 @@ export class FormComponent implements OnInit {
         color: this.product!.color,
         usuario: this.product!.recibio,
       })
+
+      return;
     }
+
+
+    this.productForm.patchValue({
+      nombre: this.product!.nombre,
+      imagen: this.product!.imagen,
+    })
+
   }
 
   minStockValidator(minStock: number): ValidatorFn {
@@ -117,7 +130,7 @@ export class FormComponent implements OnInit {
       idCategoria: [null],
       unidadMedida: [''],
       stockMinimo: [, [Validators.required, Validators.min(0)]],
-      color: [''],      
+      color: [''],
     });
   }
 

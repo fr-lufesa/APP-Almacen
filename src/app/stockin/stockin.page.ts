@@ -46,7 +46,7 @@ export class StockinPage implements OnInit {
       component: FormComponent,
       breakpoints: [ 0, .95],
       initialBreakpoint: .95,
-      componentProps: { product, entrada: true}
+      componentProps: { product, isStockin: true}
     })
 
     await modal.present();
