@@ -28,9 +28,14 @@ export class FormComponent implements OnInit {
   productForm!: FormGroup;
   title: string = "";
   categories = this.categoriesService.categorias;
+  unidadesMedida = this.productService.unidadesMedida;
 
   ngOnInit() {
-    if (this.isNew || this.isEdit) this.categoriesService.get_categories();
+    if (this.isNew || this.isEdit){
+      this.categoriesService.getCategories();
+      this.productService.getUnidadesMedida();
+
+    };
 
     this.initializeFormGroup();
     this.setFormGroup();
@@ -67,7 +72,7 @@ export class FormComponent implements OnInit {
       cantidad: [''],
       proveedor: [''],
       costoUnitario: [''],
-      recibio: [''],
+      usuario: [''],
     });
   }
 
@@ -83,20 +88,22 @@ export class FormComponent implements OnInit {
         nombre: this.product!.nombre,
         imagen: this.product!.imagen,
         idCategoria: this.product!.idCategoria,
-        unidadMedida: this.product!.unidadMedida,
+        idUnidad: this.product!.idUnidad,
         stockMinimo: this.product!.stockMinimo,
         color: this.product!.color,
-        usuario: this.product!.recibio,
+        usuario: this.product!.usuario,
       })
 
       return;
     }
 
 
-    this.productForm.patchValue({
-      nombre: this.product!.nombre,
-      imagen: this.product!.imagen,
-    })
+    if (this.isStockin || this.isStockout) {
+      this.productForm.patchValue({
+        nombre: this.product!.nombre,
+        imagen: this.product!.imagen,
+      })
+    }
 
   }
 
@@ -128,9 +135,10 @@ export class FormComponent implements OnInit {
       nombre: ['', Validators.required],
       imagen: [''],
       idCategoria: [null],
-      unidadMedida: [''],
+      idUnidad: [''],
       stockMinimo: [, [Validators.required, Validators.min(0)]],
       color: [''],
+      usuario: ['']
     });
   }
 
@@ -150,7 +158,7 @@ export class FormComponent implements OnInit {
       cantidad: this.productForm.value.cantidad,
       costoUnitario: this.productForm.value.costoUnitario,
       proveedor: this.productForm.value.proveedor,
-      recibio: this.productForm.value.recibio,
+      usuario: this.productForm.value.usuario,
     };
 
     this.productService.stockIn(stockin).subscribe({

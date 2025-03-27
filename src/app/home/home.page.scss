@@ -12,3 +12,11 @@
 *{
     text-align: center;
 }
+
+ion-toggle{
+    --track-background: rgb(218, 164, 164);
+  --track-background-checked: #b1cffc;
+
+  --handle-background: #eb7769;
+  --handle-background-checked: #8f9be2;
+}

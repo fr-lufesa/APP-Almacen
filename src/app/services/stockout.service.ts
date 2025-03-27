@@ -1,15 +1,20 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { ProductStockOut } from '../models/product_model';
+import { StockoutRequest } from '../models/stockout_model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StockoutService {
 
+  private readonly httpClient = inject(HttpClient);
   private productsOut = signal<ProductStockOut[]>([]);
 
   // Exposición pública del carrito (readonly)
   readonly cart = computed(() => this.productsOut());
+  urlBase: string = "http://192.168.0.174:8000/api";
 
   // Agregar producto al carrito (o actualizar cantidad si ya existe)
   addProduct(producto: ProductStockOut) {
@@ -49,5 +54,11 @@ export class StockoutService {
     return this.productsOut().find(p => p.idProducto === idProducto);
   }
 
+  stockOutProduct(item: StockoutRequest): Observable<string>{
+    const url = this.urlBase + "/salidas/";
+
+    return this.httpClient.post<string>(url, item);
+
+  }
 
 }

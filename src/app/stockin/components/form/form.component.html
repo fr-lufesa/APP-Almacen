@@ -34,9 +34,16 @@
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Unidad de Medida</ion-label>
-      <ion-input formControlName="unidadMedida"></ion-input>
+      <ion-label position="stacked">Unidad de medida</ion-label>
+      <ion-select formControlName="idUnidad" placeholder="Selecciona la unidad de medida">
+        @for (unidadMedida of unidadesMedida(); track $index) {
+        <ion-select-option [value]="unidadMedida.idUnidad">
+          {{ unidadMedida.nombre | uppercase }}
+        </ion-select-option>
+        }
+      </ion-select>
     </ion-item>
+
 
     <ion-item>
       <ion-label position="stacked">Stock Mínimo</ion-label>
@@ -71,11 +78,11 @@
       <ion-input type="number" formControlName="cantidad" required></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Recibió</ion-label>
-      <ion-input formControlName="recibio" required></ion-input>
-    </ion-item>
     }
+    <ion-item>
+      <ion-label position="stacked">Usuario</ion-label>
+      <ion-input formControlName="usuario" required></ion-input>
+    </ion-item>
 
     <ion-button expand="block" type="submit" [disabled]="productForm.invalid">
       Guardar Producto

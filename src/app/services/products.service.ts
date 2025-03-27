@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { IStockin, IProduct, UpdateStockResponse } from '../models/product_model';
+import { inject, Injectable, signal } from '@angular/core';
+import { IStockin, IProduct, UpdateStockResponse, UnidadMedida } from '../models/product_model';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -12,7 +12,8 @@ export class ProductsService {
 
   private productsSubject = new BehaviorSubject<IProduct[]>([]);
   private baseUrl = 'http://192.168.0.174:8000/api/';
-
+  readonly unidadesMedida = signal<UnidadMedida[]>([]);
+  
   products$ = this.productsSubject.asObservable();
 
   setNewProduct(product: IProduct): void {
@@ -45,5 +46,13 @@ export class ProductsService {
 
     return this.httpClient.put<string>(url, product).pipe(
       tap(() => this.get_products()));
+  }
+
+  getUnidadesMedida(): void{
+    const url = this.baseUrl + "unidadesMedida/";
+
+    this.httpClient.get<UnidadMedida[]>(url).subscribe(data=>{
+      this.unidadesMedida.set(data);
+    });
   }
 }

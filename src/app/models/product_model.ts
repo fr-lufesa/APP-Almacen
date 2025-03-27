@@ -1,14 +1,14 @@
 export interface IProduct {
     idProducto: number;
     nombre: string;
-    idCategoria?: string;
-    unidadMedida: string;
+    idCategoria?: number;
+    idUnidad: number;
     color?: string;
     stockMinimo: number;
     imagen?: string;
     fechaCreacion?: string;
-    recibio: string;
-    stock?: number;
+    usuario?: string;
+    // stock?: number;
 }
 
 export interface UpdateStockResponse {
@@ -26,5 +26,12 @@ export interface IStockin {
     cantidad: number;
     costoUnitario: number;
     proveedor?: string;
-    recibio?: string;
+    usuario?: string;
+}
+
+export interface UnidadMedida{
+    idUnidad: number;
+    nombre: string;
+    abreviatura: string;
+
 }

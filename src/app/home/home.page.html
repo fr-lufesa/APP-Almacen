@@ -1,6 +1,7 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Inicio</ion-title>
+  <ion-toolbar style="display: flex; flex-direction: row;">
+    <ion-title style="margin-bottom: 1rem;"> {{ title }}</ion-title>
+    <ion-toggle (ionChange)="onToggleChange($event)" aria-label="Enable Notifications"></ion-toggle>
   </ion-toolbar>
 </ion-header>
 
@@ -28,8 +29,8 @@
         <ion-card-header>
           <ion-card-title>Revisar Datos</ion-card-title>
         </ion-card-header>
-        <ion-card-content>  
-          <ion-icon name="reader-outline" style="font-size: 5rem"></ion-icon>        
+        <ion-card-content>
+          <ion-icon name="reader-outline" style="font-size: 5rem"></ion-icon>
         </ion-card-content>
       </ion-card>
     </div>

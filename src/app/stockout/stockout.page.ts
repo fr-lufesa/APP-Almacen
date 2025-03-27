@@ -4,6 +4,7 @@ import { AlertController, AlertInput, ModalController } from '@ionic/angular';
 import { ProductsService } from '../services/products.service';
 import { StockoutService } from '../services/stockout.service';
 import { CartComponent } from './components/cart/cart.component';
+import { StockoutRequest } from '../models/stockout_model';
 
 @Component({
   selector: 'app-stockout',
@@ -22,10 +23,11 @@ export class StockoutPage implements OnInit {
   products: IProduct[] = []
   filteredProducts: IProduct[] = []
   searchTerm: string = '';
-  stockOutProduct: ProductStockOut = {
+  stockOutProduct: StockoutRequest = {
     idProducto: 0,
     cantidad: 0,
-    nombre: ''
+    ppto: '',
+    usuario: ''
   };
   cart = this.stockOutService.cart;
 
@@ -52,7 +54,7 @@ export class StockoutPage implements OnInit {
 
   async presentAlert(productOut: IProduct) {
 
-    const input: any = [
+    const inputs: any = [
     { 
       type: 'text',
       name: 'nombre',
@@ -65,12 +67,18 @@ export class StockoutPage implements OnInit {
       placeholder: 'Cantidad',
       min: 1,
       max: 10000,
-    }];
+    },
+    {
+      type: 'text',
+      name: 'usuario',
+      placeholder: 'Usuario',      
+    },
+  ];
 
     const alert = await this.alertController.create({
       header: 'Salida',
       subHeader: 'Ingresa la cantidad que va a salir:',
-      inputs: input,
+      inputs: inputs,
       buttons: [
         {
           text: 'Añadir',
@@ -78,9 +86,12 @@ export class StockoutPage implements OnInit {
           handler: (data) => {            
             this.stockOutProduct.idProducto = productOut.idProducto; // Convertir a número si es necesario
             this.stockOutProduct.cantidad = Number(data.cantidad); // Convertir a número si es necesario
-            this.stockOutProduct.nombre = productOut.nombre;
+            this.stockOutProduct.usuario = data.usuario
 
-            this.stockOutService.addProduct({...this.stockOutProduct})
+            this.stockOutService.stockOutProduct(this.stockOutProduct).subscribe({
+              next: () => console.log('Producto creado y lista actualizada'),
+              error: err => console.error('Error al guardar producto:', err)
+            });            
           },
         }
       ],

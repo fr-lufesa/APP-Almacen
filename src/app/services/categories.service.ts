@@ -12,7 +12,7 @@ export class CategoriesService {
   readonly categorias = signal<Category[]>([]);
   urlBase: string = "http://192.168.0.174:8000/api";
 
-  get_categories(): void{
+  getCategories(): void{
     const url = this.urlBase + "/categories/";
 
     this.httpClient.get<Category[]>(url).subscribe(data=>{

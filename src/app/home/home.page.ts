@@ -7,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   standalone: false
 })
 export class HomePage implements OnInit {
-
-  constructor() { }
-
+  isLufesa: boolean = false;
+  title = "Lufesa";
   ngOnInit() {
   }
 
+  onToggleChange(event: any) {
+    
+    this.title = event.detail.checked ? 'Inova' : 'Lufesa';
+  }
 }
