@@ -31,7 +31,7 @@ export class FormComponent implements OnInit {
   unidadesMedida = this.productService.unidadesMedida;
 
   ngOnInit() {
-    if (this.isNew || this.isEdit){
+    if (this.isNew || this.isEdit) {
       this.categoriesService.getCategories();
       this.productService.getUnidadesMedida();
 
@@ -123,7 +123,7 @@ export class FormComponent implements OnInit {
   async showAlert(msg: string) {
     const alert = await this.alertCtrl.create({
       header: msg,
-
+      cssClass: 'alert-styles',
       buttons: ['Aceptar'],
     });
 
@@ -144,6 +144,8 @@ export class FormComponent implements OnInit {
 
 
   saveProduct() {
+    this.trimFormValues(this.productForm);
+    
     let newProduct = this.productForm.value;
     newProduct.idProducto = this.product!.idProducto;
     const msg = this.productService.editProduct(newProduct).subscribe(resp => {
@@ -153,6 +155,8 @@ export class FormComponent implements OnInit {
   }
 
   saveStockin() {
+    this.trimFormValues(this.productForm);
+
     let stockin: IStockin = {
       idProducto: this.product!.idProducto,
       cantidad: this.productForm.value.cantidad,
@@ -173,10 +177,20 @@ export class FormComponent implements OnInit {
   }
 
   saveNewProduct() {
+    this.trimFormValues(this.productForm);
+    
     let newProduct = this.productForm.value;
     this.productService.setNewProduct(newProduct);
     this.modalCtrl.dismiss();
   }
 
+  trimFormValues(form: FormGroup): void {
+    Object.keys(form.controls).forEach(key => {
+      const control = form.get(key);
+      if (control && typeof control.value === 'string') {
+        control.setValue(control.value.trim());
+      }
+    });
+  }
 
 }
