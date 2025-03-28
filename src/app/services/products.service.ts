@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { IStockin, IProduct, UpdateStockResponse, UnidadMedida } from '../models/product_model';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
@@ -16,9 +16,14 @@ export class ProductsService {
   
   products$ = this.productsSubject.asObservable();
 
+  getHeaders(): HttpHeaders {
+    const empresa = localStorage.getItem('empresa') || 'inova';
+    return new HttpHeaders({ 'x-empresa': empresa });
+  }
+
   setNewProduct(product: IProduct): void {
     const url = this.baseUrl + 'product/';
-    const headers = { headers: { 'Content-Type': 'application/json' } };
+    const headers = { headers: this.getHeaders() };
 
     this.httpClient.post<IProduct>(url, product, headers).pipe(
       tap(() => this.get_products()) // 👈 recarga automáticamente la lista después de agregar
@@ -31,27 +36,32 @@ export class ProductsService {
 
   get_products(): void {
     const url = this.baseUrl + 'products/';
+    const headers = { headers: this.getHeaders() };
 
-    this.httpClient.get<IProduct[]>(url)
+    this.httpClient.get<IProduct[]>(url, headers)
       .subscribe(products => this.productsSubject.next(products));
   }
 
   stockIn(product: IStockin): Observable<UpdateStockResponse> {
     const url = this.baseUrl + 'products/update_stock';
-    return this.httpClient.post<UpdateStockResponse>(url, product);
+    const headers = { headers: this.getHeaders() };
+
+    return this.httpClient.post<UpdateStockResponse>(url, product, headers);
   }
 
   editProduct(product: IProduct): Observable<string> {
     const url = this.baseUrl + 'products/' + product.idProducto;
+    const headers = { headers: this.getHeaders() };
 
-    return this.httpClient.put<string>(url, product).pipe(
+    return this.httpClient.put<string>(url, product, headers).pipe(
       tap(() => this.get_products()));
   }
 
   getUnidadesMedida(): void{
     const url = this.baseUrl + "unidadesMedida/";
+    const headers = { headers: this.getHeaders() };
 
-    this.httpClient.get<UnidadMedida[]>(url).subscribe(data=>{
+    this.httpClient.get<UnidadMedida[]>(url, headers).subscribe(data=>{
       this.unidadesMedida.set(data);
     });
   }
