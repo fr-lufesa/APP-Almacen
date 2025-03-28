@@ -91,8 +91,8 @@ export class StockoutPage implements OnInit {
             this.stockOutProduct.usuario = data.usuario.trim();
 
             this.stockOutService.stockOutProduct(this.stockOutProduct).subscribe({
-              next: () => console.log('Producto creado y lista actualizada'),
-              error: err => console.error('Error al guardar producto:', err)
+              next: (response) => this.openAlert('Exito', response.msg),
+              error: err => this.openAlert('Error', err.error.detail),
             });            
           },
         }
@@ -113,5 +113,15 @@ export class StockoutPage implements OnInit {
        })
    
        await modal.present();
+  }
+
+  async openAlert(header:string, subheader: string)
+  {
+    const alert = await this.alertController.create({
+      header: header,
+      subHeader: subheader
+    })
+
+    await alert.present();
   }
 }

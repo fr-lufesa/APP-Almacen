@@ -59,11 +59,11 @@ export class StockoutService {
   //   return this.productsOut().find(p => p.idProducto === idProducto);
   // }
 
-  stockOutProduct(item: StockoutRequest): Observable<string>{
+  stockOutProduct(item: StockoutRequest): Observable<any>{
     const url = this.urlBase + "/salidas/";
     const headers = { headers: this.getHeaders() };
 
-    return this.httpClient.post<string>(url, item, headers);
+    return this.httpClient.post<any>(url, item, headers);
 
   }
 

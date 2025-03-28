@@ -80,7 +80,7 @@ export class FormComponent implements OnInit {
       cantidad: [''],
       proveedor: [''],
       costoUnitario: [''],
-      usuario: [''],
+      // usuario: [''],
     });
   }
 
@@ -98,8 +98,8 @@ export class FormComponent implements OnInit {
         idCategoria: this.product!.idCategoria,
         idUnidad: this.product!.idUnidad,
         stockMinimo: this.product!.stockMinimo,
-        color: this.product!.color,
-        usuario: this.product!.usuario,
+        // color: this.product!.color,
+        // usuario: this.product!.usuario,
       })
 
       return;
@@ -140,13 +140,13 @@ export class FormComponent implements OnInit {
 
   initializeFormForNewProduct() {
     this.productForm = this.fb.group({
-      nombre: ['carretilla', Validators.required],
+      nombre: ['carretilla'],
       imagen: [''],
       idCategoria: [5],
       idUnidad: [5],
-      stockMinimo: [2, [Validators.required, Validators.min(0)]],
-      color: ['naranja'],
-      usuario: ['francisco']
+      stockMinimo: [2, [Validators.min(0)]],
+      // color: ['naranja'],
+      // usuario: ['francisco']
     });
   }
 
@@ -170,7 +170,7 @@ export class FormComponent implements OnInit {
       cantidad: this.productForm.value.cantidad,
       costoUnitario: this.productForm.value.costoUnitario,
       proveedor: this.productForm.value.proveedor,
-      usuario: this.productForm.value.usuario,
+      // usuario: this.productForm.value.usuario,
     };
 
     this.productService.stockIn(stockin).subscribe({

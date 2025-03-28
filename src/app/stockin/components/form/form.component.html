@@ -17,23 +17,11 @@
       <ion-input formControlName="nombre" required placeholder="Nombre del Producto"></ion-input>
     </ion-item>
 
-    <ion-item style="display: flex; flex-direction: row;">
-      <div class="item-flex-row" (click)="takeAPicture()">
-        <ion-label position="stacked">Imagen*</ion-label>
-        <ion-button>Tomar una foto <ion-icon name="camera-outline" color="text-color"></ion-icon></ion-button>
-        @if(this.imageLoaded){
-        <ion-icon name="checkmark-circle-outline"></ion-icon>
-        
-        }
-
-      </div>
-    </ion-item>
-
     @if(isNew || isEdit){
 
     <ion-item>
       <ion-label position="stacked">Categoría</ion-label>
-      <ion-select formControlName="idCategoria" placeholder="Selecciona la categoría">
+      <ion-select formControlName="idCategoria" placeholder="Selecciona la categoría" required>
         @for (category of categories(); track $index) {
         <ion-select-option [value]="category.id">
           {{ category.nombre }}
@@ -44,7 +32,7 @@
 
     <ion-item>
       <ion-label position="stacked">Unidad de medida</ion-label>
-      <ion-select formControlName="idUnidad" placeholder="Selecciona la unidad de medida">
+      <ion-select formControlName="idUnidad" placeholder="Selecciona la unidad de medida" required>
         @for (unidadMedida of unidadesMedida(); track $index) {
         <ion-select-option [value]="unidadMedida.idUnidad">
           {{ unidadMedida.nombre | uppercase }}
@@ -59,10 +47,20 @@
       <ion-input type="number" formControlName="stockMinimo"></ion-input>
     </ion-item>
 
-    <ion-item>
+    <ion-item style="display: flex; flex-direction: row;">
+      <div class="item-flex-row" (click)="takeAPicture()">
+        <ion-label position="stacked">Imagen*</ion-label>
+        <ion-button>Tomar una foto <ion-icon name="camera-outline" color="text-color"></ion-icon></ion-button>
+        @if(this.imageLoaded){
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        }
+      </div>
+    </ion-item>
+
+    <!-- <ion-item>
       <ion-label position="stacked">Color</ion-label>
       <ion-input formControlName="color"></ion-input>
-    </ion-item>
+    </ion-item> -->
     }
 
     <!-- <ion-item>
@@ -73,25 +71,25 @@
 
     @if (isStockin || isStockout) {
     <ion-item>
-      <ion-label position="stacked">Costo Unitario</ion-label>
+      <ion-label position="stacked" required>Costo Unitario*</ion-label>
       <ion-input type="number" formControlName="costoUnitario" required></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Proveedor</ion-label>
-      <ion-input formControlName="proveedor" required></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label position="stacked">Cantidad</ion-label>
+      <ion-label position="stacked">Cantidad*</ion-label>
       <ion-input type="number" formControlName="cantidad" required></ion-input>
     </ion-item>
 
-    }
     <ion-item>
+      <ion-label position="stacked">Proveedor</ion-label>
+      <ion-input formControlName="proveedor"></ion-input>
+    </ion-item>
+
+    }
+    <!-- <ion-item>
       <ion-label position="stacked">Usuario</ion-label>
       <ion-input formControlName="usuario" required></ion-input>
-    </ion-item>
+    </ion-item> -->
 
     <ion-button expand="block" type="submit" [disabled]="productForm.invalid">
       Guardar Producto
