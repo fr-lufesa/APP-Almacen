@@ -13,7 +13,7 @@
     <ion-item-sliding>
       <ion-item [button]="true" (click)="editStock(product)">
         <ion-avatar aria-hidden="true" slot="start">
-          <img alt="" [src]="product.imagen" />
+          <img alt="" [src]="'http://192.168.0.174:8000/' + product.imagen" />
         </ion-avatar>
         <ion-label>{{ product.nombre }}</ion-label>
         <!-- <ion-button slot="end">

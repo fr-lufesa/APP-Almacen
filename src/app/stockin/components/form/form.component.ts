@@ -4,6 +4,7 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { IProduct, IStockin } from 'src/app/models/product_model';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { ProductsService } from 'src/app/services/products.service';
+import { Camera, CameraResultType } from '@capacitor/camera';
 
 @Component({
   selector: 'app-form',
@@ -13,7 +14,13 @@ import { ProductsService } from 'src/app/services/products.service';
 })
 export class FormComponent implements OnInit {
 
-  @Input() product?: IProduct;
+  @Input() product: IProduct = {
+    idProducto: 0,
+    nombre: '',
+    idUnidad: 0,
+    stockMinimo: 0,
+    imagen: ''
+  };
   @Input() isEdit?: boolean;
   @Input() isNew?: boolean;
   @Input() isStockin?: boolean;
@@ -29,6 +36,7 @@ export class FormComponent implements OnInit {
   title: string = "";
   categories = this.categoriesService.categorias;
   unidadesMedida = this.productService.unidadesMedida;
+  imageLoaded: boolean = false;
 
   ngOnInit() {
     if (this.isNew || this.isEdit) {
@@ -132,20 +140,20 @@ export class FormComponent implements OnInit {
 
   initializeFormForNewProduct() {
     this.productForm = this.fb.group({
-      nombre: ['', Validators.required],
+      nombre: ['carretilla', Validators.required],
       imagen: [''],
-      idCategoria: [null],
-      idUnidad: [''],
-      stockMinimo: [, [Validators.required, Validators.min(0)]],
-      color: [''],
-      usuario: ['']
+      idCategoria: [5],
+      idUnidad: [5],
+      stockMinimo: [2, [Validators.required, Validators.min(0)]],
+      color: ['naranja'],
+      usuario: ['francisco']
     });
   }
 
 
   saveProduct() {
     this.trimFormValues(this.productForm);
-    
+
     let newProduct = this.productForm.value;
     newProduct.idProducto = this.product!.idProducto;
     const msg = this.productService.editProduct(newProduct).subscribe(resp => {
@@ -178,7 +186,7 @@ export class FormComponent implements OnInit {
 
   saveNewProduct() {
     this.trimFormValues(this.productForm);
-    
+
     let newProduct = this.productForm.value;
     this.productService.setNewProduct(newProduct);
     this.modalCtrl.dismiss();
@@ -193,4 +201,20 @@ export class FormComponent implements OnInit {
     });
   }
 
+  async takeAPicture() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.DataUrl,
+      saveToGallery: true
+    });
+
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+    // this.imageLoaded = image.webPath!.length > 0 ? true: false;
+    this.productForm.patchValue({imagen: image.dataUrl});
+
+  }
 }

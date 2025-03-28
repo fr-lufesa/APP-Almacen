@@ -10,7 +10,7 @@ export class AppComponent {
   constructor() {}
 
   ngOnInit(){
-    const prefersLufesa = localStorage.getItem('theme') === 'lufesa';
-    document.body.classList.add(prefersLufesa ? 'lufesa-theme' : 'inova-theme');
+    document.body.classList.add('lufesa-theme');
+    localStorage.setItem('empresa', 'lufesa');
   }
 }

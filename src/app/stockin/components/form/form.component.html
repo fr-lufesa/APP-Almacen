@@ -8,16 +8,25 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true" scroll="true" style="overflow-y: auto!important;">
-  <form [formGroup]="productForm" (ngSubmit)="submit()">
+  <form [formGroup]="productForm" (ngSubmit)="submit()" style="text-align: center;">
+
+    <img [src]="'http://192.168.0.174:8000/' + product.imagen" alt="" width="50%">
 
     <ion-item>
       <ion-label position="stacked">Nombre</ion-label>
       <ion-input formControlName="nombre" required placeholder="Nombre del Producto"></ion-input>
     </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Imagen (URL)</ion-label>
-      <ion-input formControlName="imagen"></ion-input>
+    <ion-item style="display: flex; flex-direction: row;">
+      <div class="item-flex-row" (click)="takeAPicture()">
+        <ion-label position="stacked">Imagen*</ion-label>
+        <ion-button>Tomar una foto <ion-icon name="camera-outline" color="text-color"></ion-icon></ion-button>
+        @if(this.imageLoaded){
+        <ion-icon name="checkmark-circle-outline"></ion-icon>
+        
+        }
+
+      </div>
     </ion-item>
 
     @if(isNew || isEdit){

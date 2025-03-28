@@ -79,7 +79,8 @@ ion-toolbar {
 }
 
 ion-list {
-    background: var(--ion-color-secondary) !important;
+    background: var(--ion-color-tertiary) !important;
+    border-radius: 15px;
 }
 
 ion-item {
@@ -88,6 +89,10 @@ ion-item {
 
 ion-card {
     background-color: var(--ion-color-primary) !important;
+}
+
+.alert-radio-label{
+    color: var(--ion-text-color)!important;
 }
 
 .alert-styles .alert-wrapper{
