@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title class="ion-text-center">Salidas</ion-title>
+    <ion-title class="ion-text-center">Salidas {{ empresa | titlecase }} </ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,7 +8,7 @@
 
   <ion-searchbar clearIcon="close-outline" [(ngModel)]="searchTerm" (input)="searchProducts()"
     (ionClear)="resetList()"></ion-searchbar>
-
+  @if(filteredProducts.length > 0){
   <ion-list [inset]="true">
     @for (product of filteredProducts; track $index) {
     <ion-item-sliding>
@@ -24,8 +24,10 @@
     </ion-item-sliding>
     }
   </ion-list>
-
-  <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="right: 3rem;" (click)="openCart()">
+  }@else {
+  <h3 class="ion-text-center">No hay productos disponibles, ve al tab de productos para añadir uno!</h3>
+  }
+  <!-- <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="right: 3rem;" (click)="openCart()">
     <ion-fab-button>
       @if(cart().length > 0)
       {
@@ -33,5 +35,5 @@
       }
       <ion-icon name="basket"></ion-icon>
     </ion-fab-button>
-  </ion-fab>
+  </ion-fab> -->
 </ion-content>

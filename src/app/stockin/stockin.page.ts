@@ -18,7 +18,8 @@ export class StockinPage implements OnInit {
   products: IProduct[] = []
   filteredProducts: IProduct[] = []
   searchTerm: string = '';
-
+  empresa = localStorage.getItem('empresa');
+  
   ngOnInit() {
     this.productService.products$.subscribe(products => {
       this.products = products;

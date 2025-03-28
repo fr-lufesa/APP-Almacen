@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar style="display: flex; flex-direction: row;">
-    <ion-title style="margin-bottom: 1rem;"> {{ title }}</ion-title>
-    <ion-toggle (ionChange)="onToggleChange($event)" aria-label="Enable Notifications"></ion-toggle>
+    <ion-title style="margin-bottom: 1rem;"> {{ title | titlecase }}</ion-title>
+    <ion-toggle (ionChange)="onToggleChange($event)" aria-label="Enable Notifications" style="padding-right: 1rem;"></ion-toggle>
   </ion-toolbar>
 </ion-header>
 

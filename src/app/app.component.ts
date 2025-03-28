@@ -8,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   constructor() {}
+
+  ngOnInit(){
+    const prefersLufesa = localStorage.getItem('theme') === 'lufesa';
+    document.body.classList.add(prefersLufesa ? 'lufesa-theme' : 'inova-theme');
+  }
 }

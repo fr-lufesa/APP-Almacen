@@ -18,7 +18,7 @@ export class SearchPage implements OnInit {
   products: IProduct[] = [];
   filteredProducts: IProduct[] = [];
   searchTerm: string = '';
-
+  empresa = localStorage.getItem('empresa');
 
   ngOnInit() {
     this.productService.products$.subscribe(products => {
@@ -45,7 +45,7 @@ export class SearchPage implements OnInit {
       component: FormComponent,
       breakpoints: [0, .95],
       initialBreakpoint: .95,
-      componentProps: {isNew: true}
+      componentProps: { isNew: true }
     })
 
     modal.present();

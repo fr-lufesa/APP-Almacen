@@ -1,13 +1,14 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title class="ion-text-center">Productos</ion-title>
+    <ion-title class="ion-text-center">Productos {{ empresa | titlecase }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-searchbar clearIcon="close-outline" [(ngModel)]="searchTerm" (input)="searchProducts()"
-  (ionClear)="resetList()"></ion-searchbar>
-  <ion-list [inset]="true">
+    (ionClear)="resetList()"></ion-searchbar>
+
+  @if (filteredProducts.length > 0) { <ion-list [inset]="true">
     @for (product of filteredProducts; track $index) {
     <ion-item-sliding>
       <ion-item [button]="true">
@@ -22,7 +23,7 @@
           <ion-icon slot="end" name="trash" color="danger"></ion-icon>
         </ion-button> -->
       </ion-item>
-      <ion-item-options slot="end" (click)="editProduct(product)">        
+      <ion-item-options slot="end" (click)="editProduct(product)">
         <ion-item-option color="warning">
           <ion-icon slot="icon-only" name="pencil"></ion-icon>
         </ion-item-option>
@@ -32,6 +33,11 @@
       </ion-item-options>
     </ion-item-sliding>
     }
-  </ion-list>
-  <ion-button expand="block" color="success" (click)="addProduct()">Añadir Nuevo producto <ion-icon name="add"></ion-icon></ion-button>
+    </ion-list>
+    }
+    @else {
+    <h3 class="ion-text-center">No hay productos disponibles, añade uno!</h3>
+    }
+    <ion-button expand="block" color="success" (click)="addProduct()">Añadir Nuevo producto <ion-icon
+        name="add"></ion-icon></ion-button>
 </ion-content>

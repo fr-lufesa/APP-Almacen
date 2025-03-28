@@ -30,6 +30,7 @@ export class StockoutPage implements OnInit {
     usuario: ''
   };
   cart = this.stockOutService.cart;
+  empresa = localStorage.getItem('empresa');
 
   ngOnInit() {
     this.productService.products$.subscribe(products => {
@@ -79,6 +80,7 @@ export class StockoutPage implements OnInit {
       header: 'Salida',
       subHeader: 'Ingresa la cantidad que va a salir:',
       inputs: inputs,
+      cssClass: 'alert-styles',
       buttons: [
         {
           text: 'Añadir',
@@ -86,7 +88,7 @@ export class StockoutPage implements OnInit {
           handler: (data) => {            
             this.stockOutProduct.idProducto = productOut.idProducto; // Convertir a número si es necesario
             this.stockOutProduct.cantidad = Number(data.cantidad); // Convertir a número si es necesario
-            this.stockOutProduct.usuario = data.usuario
+            this.stockOutProduct.usuario = data.usuario.trim();
 
             this.stockOutService.stockOutProduct(this.stockOutProduct).subscribe({
               next: () => console.log('Producto creado y lista actualizada'),

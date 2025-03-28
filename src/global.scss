@@ -36,7 +36,60 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
+/* 🎨 Tema pastel azul - Inova */
+.inova-theme {
+    --ion-background-color: #eaf4ff; // Azul cielo muy claro
+    --ion-text-color: #2a4d69; // Azul grisáceo
+    --ion-color-primary: #a3c9f1; // Azul pastel
+    --ion-color-secondary: #d0e6fa; // Azul aún más claro
+    --ion-color-tertiary: #c1dbee; // Azul tenue
+    --ion-color-success: #b2e0c0; // Verde pastel
+    --ion-color-warning: #fff4b3; // Amarillo pastel
+    --ion-color-danger: #f7b5a8; // Rojo salmón pastel
+    --ion-color-light: #fdfdfd;
+    --ion-color-dark: #3b4a5a;
+}
 
-ion-card{
-    background-color: rgb(51, 51, 51)!important;
+/* 🎨 Tema pastel rojo - Lufesa */
+.lufesa-theme {
+    --ion-background-color: #fff2f2; // Rosa pálido
+    --ion-text-color: #5a2a2a; // Marrón rojizo suave
+    --ion-color-primary: #f4a8a8; // Rojo pastel
+    --ion-color-secondary: #fbd4d4; // Rosa pastel
+    --ion-color-tertiary: #eac0c0; // Rosado muy suave
+    --ion-color-success: #c9e4c5; // Verde pastel
+    --ion-color-warning: #fff1b8; // Amarillo suave
+    --ion-color-danger: #f4aaaa; // Rojo claro pastel
+    --ion-color-light: #fdfdfd;
+    --ion-color-dark: #402020;
+}
+
+ion-card-title {
+    color: var(--ion-text-color);
+}
+
+ion-card-content {
+    ion-icon {
+        color: var(--ion-text-color);
+    }
+}
+
+ion-toolbar {
+    --background: var(--ion-background-color);
+}
+
+ion-list {
+    background: var(--ion-color-secondary) !important;
+}
+
+ion-item {
+    --background: var(--ion-color-tertiary) !important;
+}
+
+ion-card {
+    background-color: var(--ion-color-primary) !important;
+}
+
+.alert-styles .alert-wrapper{
+    color: var(--ion-text-color);
 }
