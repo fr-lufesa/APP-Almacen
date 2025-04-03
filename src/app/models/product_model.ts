@@ -3,12 +3,13 @@ export interface IProduct {
     nombre: string;
     idCategoria?: number;
     idUnidad: number;
-    color?: string;
+    // color?: string;
     stockMinimo: number;
     imagen?: string;
     fechaCreacion?: string;
-    usuario?: string;
-    // stock?: number;
+    // usuario?: string;
+    stock?: number;
+    CostoUnitario?: number;
 }
 
 export interface UpdateStockResponse {
@@ -35,3 +36,7 @@ export interface UnidadMedida{
     abreviatura: string;
 
 }
+
+export type ProductsByCategory = {
+    [categoria: string]: IProduct[];
+  };

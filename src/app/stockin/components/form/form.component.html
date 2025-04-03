@@ -43,8 +43,8 @@
 
 
     <ion-item>
-      <ion-label position="stacked">Stock Mínimo</ion-label>
-      <ion-input type="number" formControlName="stockMinimo"></ion-input>
+      <ion-label position="stacked">Stock Mínimo*</ion-label>
+      <ion-input type="number" formControlName="stockMinimo" required></ion-input>
     </ion-item>
 
     <ion-item style="display: flex; flex-direction: row;">
@@ -52,7 +52,10 @@
         <ion-label position="stacked">Imagen*</ion-label>
         <ion-button>Tomar una foto <ion-icon name="camera-outline" color="text-color"></ion-icon></ion-button>
         @if(this.imageLoaded){
-        <ion-icon name="checkmark-circle-outline"></ion-icon>
+          <div>
+            <p>Imagen Cargada!</p>
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+          </div>
         }
       </div>
     </ion-item>

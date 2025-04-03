@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { IStockin, IProduct, UpdateStockResponse, UnidadMedida } from '../models/product_model';
+import { IStockin, IProduct, UpdateStockResponse, UnidadMedida, ProductsByCategory } from '../models/product_model';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -10,7 +10,7 @@ export class ProductsService {
 
   private readonly httpClient = inject(HttpClient);
 
-  private productsSubject = new BehaviorSubject<IProduct[]>([]);
+  private productsSubject = new BehaviorSubject<ProductsByCategory>({});
   private baseUrl = 'http://192.168.0.174:8000/api/';
   readonly unidadesMedida = signal<UnidadMedida[]>([]);
   
@@ -21,16 +21,13 @@ export class ProductsService {
     return new HttpHeaders({ 'x-empresa': empresa });
   }
 
-  setNewProduct(product: IProduct): void {
+  setNewProduct(product: IProduct): Observable<any> {
     const url = this.baseUrl + 'product/';
     const headers = { headers: this.getHeaders() };
 
-    this.httpClient.post<IProduct>(url, product, headers).pipe(
+    return this.httpClient.post<any>(url, product, headers).pipe(
       tap(() => this.get_products()) // 👈 recarga automáticamente la lista después de agregar
-    ).subscribe({
-      next: () => console.log('Producto creado y lista actualizada'),
-      error: err => console.error('Error al guardar producto:', err)
-    });
+    );
 
   }
 
@@ -38,7 +35,7 @@ export class ProductsService {
     const url = this.baseUrl + 'products/';
     const headers = { headers: this.getHeaders() };
 
-    this.httpClient.get<IProduct[]>(url, headers)
+    this.httpClient.get<ProductsByCategory>(url, headers)
       .subscribe(products => this.productsSubject.next(products));
   }
 
@@ -46,7 +43,8 @@ export class ProductsService {
     const url = this.baseUrl + 'products/update_stock';
     const headers = { headers: this.getHeaders() };
 
-    return this.httpClient.post<UpdateStockResponse>(url, product, headers);
+    return this.httpClient.post<UpdateStockResponse>(url, product, headers).pipe(
+      tap(() => this.get_products()));
   }
 
   editProduct(product: IProduct): Observable<string> {

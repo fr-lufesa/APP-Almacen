@@ -1,17 +1,22 @@
 .item-flex-row {
     display: flex;
     flex-direction: row;
-    ion-icon{
-        color: green;
-        font-size: 1.5rem;
-        align-self: end;
-        transition: ease-in .2s;
+
+    div {
+        display: flex;
+        flex-direction: row;
         margin-left: 1rem;
-    }
-    
-    ion-button{
-        margin-top: 1rem;
+        ion-icon {
+            color: green;
+            font-size: 1.5rem;
+            align-self: center;
+            transition: ease-in .2s;
+            margin-left: .5rem;
+        }
     }
 
-   
+}
+
+ion-button{
+    height: 2.8rem;
 }

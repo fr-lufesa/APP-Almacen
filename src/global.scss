@@ -48,6 +48,7 @@
     --ion-color-danger: #f7b5a8; // Rojo salmón pastel
     --ion-color-light: #fdfdfd;
     --ion-color-dark: #3b4a5a;
+    --ion-color-red: #ff5757;
 }
 
 /* 🎨 Tema pastel rojo - Lufesa */
@@ -60,6 +61,7 @@
     --ion-color-success: #c9e4c5; // Verde pastel
     --ion-color-warning: #fff1b8; // Amarillo suave
     --ion-color-danger: #f4aaaa; // Rojo claro pastel
+    --ion-color-red: #ff5757;
     --ion-color-light: #fdfdfd;
     --ion-color-dark: #402020;
 }
@@ -96,5 +98,9 @@ ion-card {
 }
 
 .alert-styles .alert-wrapper{
+    color: var(--ion-text-color);
+}
+
+ion-icon.ion-accordion-toggle-icon.md.hydrated{
     color: var(--ion-text-color);
 }

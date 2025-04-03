@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FormComponent } from './components/form/form.component';
 import { ProductsService } from '../services/products.service';
-import { IProduct } from '../models/product_model';
+import { IProduct, ProductsByCategory } from '../models/product_model';
 
 @Component({
   selector: 'app-stockin',
@@ -15,11 +15,11 @@ export class StockinPage implements OnInit {
   private readonly modalCtrl = inject(ModalController);
   private readonly productService = inject(ProductsService);
 
-  products: IProduct[] = []
-  filteredProducts: IProduct[] = []
+  products: ProductsByCategory = {}
+  filteredProducts: ProductsByCategory = {}
   searchTerm: string = '';
   empresa = localStorage.getItem('empresa');
-  
+
   ngOnInit() {
     this.productService.products$.subscribe(products => {
       this.products = products;
@@ -30,24 +30,33 @@ export class StockinPage implements OnInit {
 
   }
 
-  
+
   searchProducts(): void {
     const term = this.searchTerm.toLowerCase();
-    this.filteredProducts = this.products.filter(product =>
-      product.nombre.toLowerCase().includes(term)
-    );
+
+    this.filteredProducts = Object.entries(this.products).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
+      const filtrados = productos.filter(product =>
+        product.nombre.toLowerCase().includes(term)
+      );
+
+      if (filtrados.length > 0) {
+        acc[categoria] = filtrados;
+      }
+
+      return acc;
+    }, {});
   }
 
-  resetList(): void{
+  resetList(): void {
     this.filteredProducts = this.products
   }
 
-  async editStock(product: IProduct){
+  async editStock(product: IProduct) {
     const modal = await this.modalCtrl.create({
       component: FormComponent,
-      breakpoints: [ 0, .95],
+      breakpoints: [0, .95],
       initialBreakpoint: .95,
-      componentProps: { product, isStockin: true}
+      componentProps: { product, isStockin: true }
     })
 
     await modal.present();
@@ -56,5 +65,9 @@ export class StockinPage implements OnInit {
     if (data) {
       console.log('Producto modificado o nuevo:', data);
     }
+  }
+
+  ionViewWillEnter() {
+    this.empresa = localStorage.getItem('empresa');
   }
 }

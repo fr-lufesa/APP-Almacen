@@ -8,32 +8,49 @@
 
   <ion-searchbar clearIcon="close-outline" [(ngModel)]="searchTerm" (input)="searchProducts()"
     (ionClear)="resetList()"></ion-searchbar>
-  @if(filteredProducts.length > 0){
-  <ion-list [inset]="true">
-    @for (product of filteredProducts; track $index) {
-    <ion-item-sliding>
-      <ion-item [button]="true" (click)="presentAlert(product)">
-        <ion-avatar aria-hidden="true" slot="start">
-          <img alt="" [src]="'http://192.168.0.174:8000/' + product.imagen" />
-        </ion-avatar>
-        <ion-label>
-          <h2>{{ product.nombre }}</h2>
-          <!-- <p>Cantidad en stock: <span style="color: green;">{{ product.stock }}</span></p> -->
-        </ion-label>
+
+  @if (filteredProducts) {
+  <ion-accordion-group expand="multiple" style="width: 95%!important; margin: 0 auto!important;">
+    @for (category of filteredProducts | keyvalue; track $index) {
+    <ion-accordion [value]="category.key">
+
+      <ion-item slot="header">
+        <ion-label>{{ category.key }}</ion-label>
       </ion-item>
-    </ion-item-sliding>
+
+      <div slot="content">
+        @for (product of category.value; track $index) {
+        <ion-item [button]="true" (click)="presentAlert(product)">
+          <ion-avatar slot="start">
+            @if (product.imagen) {
+            <img [src]="'http://192.168.0.174:8000/' + product.imagen" alt="" />
+            } @else {
+            <img src="http://192.168.0.174:8000/media/productos/default.jpg" alt="" />
+            }
+          </ion-avatar>
+
+          <ion-label>
+            {{ product.nombre }}
+            <p style="font-size: small;">Productos disponibles: {{ product.stock }}</p>
+            <p>{{ product.CostoUnitario | currency }}</p>
+          </ion-label>
+
+          <!-- <ion-button slot="end" color="light">
+            <ion-icon slot="icon-only" name="pencil" color="warning"></ion-icon>
+          </ion-button>
+          <ion-button slot="end">
+            <ion-icon slot="icon-only" name="trash" style="color: var(--ion-color-red);"></ion-icon>
+          </ion-button> -->
+        </ion-item>
+        }
+      </div>
+
+    </ion-accordion>
     }
-  </ion-list>
-  }@else {
-  <h3 class="ion-text-center">No hay productos disponibles, ve al tab de productos para añadir uno!</h3>
+  </ion-accordion-group>
+
   }
-  <!-- <ion-fab horizontal="end" vertical="bottom" slot="fixed" style="right: 3rem;" (click)="openCart()">
-    <ion-fab-button>
-      @if(cart().length > 0)
-      {
-      <span class="stockOut">{{ cart().length }} </span>
-      }
-      <ion-icon name="basket"></ion-icon>
-    </ion-fab-button>
-  </ion-fab> -->
+  @else {
+  <h3 class="ion-text-center">No hay productos disponibles, añade uno!</h3>
+  }
 </ion-content>

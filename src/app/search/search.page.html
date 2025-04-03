@@ -8,36 +8,58 @@
   <ion-searchbar clearIcon="close-outline" [(ngModel)]="searchTerm" (input)="searchProducts()"
     (ionClear)="resetList()"></ion-searchbar>
 
-  @if (filteredProducts.length > 0) { <ion-list [inset]="true">
-    @for (product of filteredProducts; track $index) {
-    <ion-item-sliding>
-      <ion-item [button]="true">
-        <ion-avatar aria-hidden="true" slot="start">
-          <img alt="" [src]="'http://192.168.0.174:8000/' + product.imagen" />
-        </ion-avatar>
-        <ion-label>{{ product.nombre }}</ion-label>
-        <!-- <ion-button slot="end">
-          <ion-icon slot="end" name="pencil" color="warning"></ion-icon>
-        </ion-button>
-        <ion-button slot="end">
-          <ion-icon slot="end" name="trash" color="danger"></ion-icon>
-        </ion-button> -->
+  @if (products) {
+  <ion-accordion-group expand="multiple" style="width: 95%!important; margin: 0 auto!important;">
+    @for (category of filteredProducts | keyvalue; track $index) {
+    <ion-accordion [value]="category.key">
+
+      <ion-item slot="header">
+        <div>
+          <ion-label>{{ category.key }}</ion-label>
+          <ion-label style="font-size: small;">Valor total: <span style="color: green;">{{ getTotalCosto(category.value) | currency}}</span></ion-label>
+        </div>
       </ion-item>
-      <ion-item-options slot="end" (click)="editProduct(product)">
-        <ion-item-option color="warning">
-          <ion-icon slot="icon-only" name="pencil"></ion-icon>
-        </ion-item-option>
-        <ion-item-option color="danger" expandable="true">
-          <ion-icon slot="icon-only" name="trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+
+      <div slot="content">
+        @for (product of category.value; track $index) {
+        <ion-item [button]="true">
+          <ion-avatar slot="start">
+            @if (product.imagen) {
+            <img [src]="'http://192.168.0.174:8000/' + product.imagen" alt="" />
+            } @else {
+            <img src="http://192.168.0.174:8000/media/productos/default.jpg" alt="" />
+            }
+          </ion-avatar>
+
+          <ion-label>
+            {{ product.nombre }}
+            <p style="font-size: small;">Productos disponibles: {{ product.stock }}</p>
+            <p> Precio unitario: {{ product.CostoUnitario | currency }}</p>
+          </ion-label>
+
+          <ion-button slot="end" color="light" (click)="editProduct(product)">
+            <ion-icon slot="icon-only" name="pencil" style="color: rgb(243, 243, 99);"></ion-icon>
+          </ion-button>
+          <ion-button slot="end">
+            <ion-icon slot="icon-only" name="trash" style="color: var(--ion-color-red);"></ion-icon>
+          </ion-button>
+        </ion-item>
+        }
+      </div>
+    </ion-accordion>
     }
-    </ion-list>
-    }
-    @else {
-    <h3 class="ion-text-center">No hay productos disponibles, añade uno!</h3>
-    }
-    <ion-button expand="block" color="success" (click)="addProduct()">Añadir Nuevo producto <ion-icon
-        name="add"></ion-icon></ion-button>
+  </ion-accordion-group>
+
+  }
+  @else {
+  <h3 class="ion-text-center">No hay productos disponibles, añade uno!</h3>
+  }
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="addProduct()" color="success">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <!-- <ion-button expand="block" color="success" (click)="addProduct()">Añadir Nuevo producto <ion-icon
+        name="add"></ion-icon></ion-button> -->
 </ion-content>

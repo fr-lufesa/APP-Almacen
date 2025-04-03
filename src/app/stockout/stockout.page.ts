@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { IProduct, ProductStockOut } from '../models/product_model';
+import { IProduct, ProductsByCategory, ProductStockOut } from '../models/product_model';
 import { AlertController, AlertInput, ModalController } from '@ionic/angular';
 import { ProductsService } from '../services/products.service';
 import { StockoutService } from '../services/stockout.service';
@@ -14,14 +14,13 @@ import { StockoutRequest } from '../models/stockout_model';
 })
 export class StockoutPage implements OnInit {
 
-  // private readonly modalCtrl = inject(ModalController);
   private readonly productService = inject(ProductsService);
   private readonly alertController = inject(AlertController);
   private readonly stockOutService = inject(StockoutService);
   private readonly modalCtrl = inject(ModalController);
 
-  products: IProduct[] = []
-  filteredProducts: IProduct[] = []
+  products: ProductsByCategory = {}
+  filteredProducts: ProductsByCategory = {}
   searchTerm: string = '';
   stockOutProduct: StockoutRequest = {
     idProducto: 0,
@@ -44,9 +43,18 @@ export class StockoutPage implements OnInit {
 
   searchProducts(): void {
     const term = this.searchTerm.toLowerCase();
-    this.filteredProducts = this.products.filter(product =>
-      product.nombre.toLowerCase().includes(term)
-    );
+
+    this.filteredProducts = Object.entries(this.products).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
+      const filtrados = productos.filter(product =>
+        product.nombre.toLowerCase().includes(term)
+      );
+
+      if (filtrados.length > 0) {
+        acc[categoria] = filtrados;
+      }
+
+      return acc;
+    }, {});
   }
 
   resetList(): void {
@@ -56,25 +64,25 @@ export class StockoutPage implements OnInit {
   async presentAlert(productOut: IProduct) {
 
     const inputs: any = [
-    { 
-      type: 'text',
-      name: 'nombre',
-      value: productOut.nombre,
-      disabled: true
-    },
-    {
-      type: 'number',
-      name: 'cantidad',
-      placeholder: 'Cantidad',
-      min: 1,
-      max: 10000,
-    },
-    {
-      type: 'text',
-      name: 'usuario',
-      placeholder: 'Usuario',      
-    },
-  ];
+      {
+        type: 'text',
+        name: 'nombre',
+        value: productOut.nombre,
+        disabled: true
+      },
+      {
+        type: 'number',
+        name: 'cantidad',
+        placeholder: 'Cantidad',
+        min: 1,
+        max: 10000,
+      },
+      // {
+      //   type: 'text',
+      //   name: 'usuario',
+      //   placeholder: 'Usuario',
+      // },
+    ];
 
     const alert = await this.alertController.create({
       header: 'Salida',
@@ -85,43 +93,45 @@ export class StockoutPage implements OnInit {
         {
           text: 'Añadir',
           role: 'confirm',
-          handler: (data) => {            
+          handler: (data) => {
             this.stockOutProduct.idProducto = productOut.idProducto; // Convertir a número si es necesario
             this.stockOutProduct.cantidad = Number(data.cantidad); // Convertir a número si es necesario
-            this.stockOutProduct.usuario = data.usuario.trim();
+            // this.stockOutProduct.usuario = data.usuario.trim();
 
             this.stockOutService.stockOutProduct(this.stockOutProduct).subscribe({
               next: (response) => this.openAlert('Exito', response.msg),
               error: err => this.openAlert('Error', err.error.detail),
-            });            
+            });
           },
         }
       ],
     });
 
     await alert.present();
-    console.log("Stock out: ", this.cart().length);
+    // console.log("Stock out: ", this.cart().length);
 
   }
 
-  async openCart()
-  {
+  async openCart() {
     const modal = await this.modalCtrl.create({
-         component: CartComponent,
-         breakpoints: [ 0, .95],
-         initialBreakpoint: .95,
-       })
-   
-       await modal.present();
+      component: CartComponent,
+      breakpoints: [0, .95],
+      initialBreakpoint: .95,
+    })
+
+    await modal.present();
   }
 
-  async openAlert(header:string, subheader: string)
-  {
+  async openAlert(header: string, subheader: string) {
     const alert = await this.alertController.create({
       header: header,
       subHeader: subheader
     })
 
     await alert.present();
+  }
+
+  ionViewWillEnter() {
+    this.empresa = localStorage.getItem('empresa');
   }
 }

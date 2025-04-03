@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormComponent } from '../stockin/components/form/form.component';
-import { IProduct } from '../models/product_model';
+import { IProduct, ProductsByCategory } from '../models/product_model';
 import { ModalController } from '@ionic/angular';
 import { ProductsService } from '../services/products.service';
 
@@ -15,8 +15,8 @@ export class SearchPage implements OnInit {
   private readonly productService = inject(ProductsService);
   private readonly modalCtrl = inject(ModalController);
 
-  products: IProduct[] = [];
-  filteredProducts: IProduct[] = [];
+  products: ProductsByCategory = {};
+  filteredProducts: ProductsByCategory = {};
   searchTerm: string = '';
   empresa = localStorage.getItem('empresa');
 
@@ -31,10 +31,20 @@ export class SearchPage implements OnInit {
 
   searchProducts(): void {
     const term = this.searchTerm.toLowerCase();
-    this.filteredProducts = this.products.filter(product =>
-      product.nombre.toLowerCase().includes(term)
-    );
+  
+    this.filteredProducts = Object.entries(this.products).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
+      const filtrados = productos.filter(product =>
+        product.nombre.toLowerCase().includes(term)
+      );
+  
+      if (filtrados.length > 0) {
+        acc[categoria] = filtrados;
+      }
+  
+      return acc;
+    }, {});
   }
+  
 
   resetList(): void {
     this.filteredProducts = this.products
@@ -62,4 +72,16 @@ export class SearchPage implements OnInit {
     await modal.present();
   }
 
+  getTotalCosto(products: IProduct[]): number {
+    let total = 0;
+    products.forEach((product: IProduct) => {
+      total += product.CostoUnitario! * product.stock!;
+    });
+
+    return total;
+  }
+
+  ionViewWillEnter(){
+    this.empresa = localStorage.getItem('empresa');
+  }
 }

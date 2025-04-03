@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit, Signal } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, inject, Input, OnInit, Signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AlertController, ModalController } from '@ionic/angular';
 import { IProduct, IStockin } from 'src/app/models/product_model';
@@ -30,6 +30,7 @@ export class FormComponent implements OnInit {
   private readonly productService = inject(ProductsService);
   private readonly categoriesService = inject(CategoriesService);
   private readonly alertCtrl = inject(AlertController);
+  private readonly cdr = inject(ChangeDetectorRef);
   modalCtrl = inject(ModalController);
 
   productForm!: FormGroup;
@@ -128,9 +129,10 @@ export class FormComponent implements OnInit {
 
   }
 
-  async showAlert(msg: string) {
+  async showAlert(msg: string, err?: any) {
     const alert = await this.alertCtrl.create({
       header: msg,
+      message: err,
       cssClass: 'alert-styles',
       buttons: ['Aceptar'],
     });
@@ -140,11 +142,11 @@ export class FormComponent implements OnInit {
 
   initializeFormForNewProduct() {
     this.productForm = this.fb.group({
-      nombre: ['carretilla'],
+      nombre: [''],
       imagen: [''],
-      idCategoria: [5],
-      idUnidad: [5],
-      stockMinimo: [2, [Validators.min(0)]],
+      idCategoria: [],
+      idUnidad: [],
+      stockMinimo: [, [Validators.min(0)]],
       // color: ['naranja'],
       // usuario: ['francisco']
     });
@@ -188,7 +190,10 @@ export class FormComponent implements OnInit {
     this.trimFormValues(this.productForm);
 
     let newProduct = this.productForm.value;
-    this.productService.setNewProduct(newProduct);
+    this.productService.setNewProduct(newProduct).subscribe({
+      next: () => this.showAlert('Producto creado y lista actualizada'),
+      error: err => this.showAlert('Error al guardar producto:', err)
+    });
     this.modalCtrl.dismiss();
   }
 
@@ -214,6 +219,10 @@ export class FormComponent implements OnInit {
     // passed to the Filesystem API to read the raw data of the image,
     // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
     // this.imageLoaded = image.webPath!.length > 0 ? true: false;
+    if(image.dataUrl)
+    {
+      this.imageLoaded = true;
+    }
     this.productForm.patchValue({imagen: image.dataUrl});
 
   }
