@@ -5,6 +5,7 @@ import { ProductsService } from '../services/products.service';
 import { StockoutService } from '../services/stockout.service';
 import { CartComponent } from './components/cart/cart.component';
 import { StockoutRequest } from '../models/stockout_model';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-stockout',
@@ -30,6 +31,7 @@ export class StockoutPage implements OnInit {
   };
   cart = this.stockOutService.cart;
   empresa = localStorage.getItem('empresa');
+  urlBase = environment.url
 
   ngOnInit() {
     this.productService.products$.subscribe(products => {

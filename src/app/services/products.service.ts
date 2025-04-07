@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { IStockin, IProduct, UpdateStockResponse, UnidadMedida, ProductsByCategory } from '../models/product_model';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class ProductsService {
   private readonly httpClient = inject(HttpClient);
 
   private productsSubject = new BehaviorSubject<ProductsByCategory>({});
-  private baseUrl = 'http://192.168.0.174:8000/api/';
+  private baseUrl = environment.url;
   readonly unidadesMedida = signal<UnidadMedida[]>([]);
   
   products$ = this.productsSubject.asObservable();
@@ -22,7 +23,7 @@ export class ProductsService {
   }
 
   setNewProduct(product: IProduct): Observable<any> {
-    const url = this.baseUrl + 'product/';
+    const url = this.baseUrl + 'api/product/';
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.post<any>(url, product, headers).pipe(
@@ -32,7 +33,7 @@ export class ProductsService {
   }
 
   get_products(): void {
-    const url = this.baseUrl + 'products/';
+    const url = this.baseUrl + 'api/products/';
     const headers = { headers: this.getHeaders() };
 
     this.httpClient.get<ProductsByCategory>(url, headers)
@@ -40,7 +41,7 @@ export class ProductsService {
   }
 
   stockIn(product: IStockin): Observable<UpdateStockResponse> {
-    const url = this.baseUrl + 'products/update_stock';
+    const url = this.baseUrl + 'api/products/update_stock';
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.post<UpdateStockResponse>(url, product, headers).pipe(
@@ -48,7 +49,7 @@ export class ProductsService {
   }
 
   editProduct(product: IProduct): Observable<string> {
-    const url = this.baseUrl + 'products/' + product.idProducto;
+    const url = this.baseUrl + 'api/products/' + product.idProducto;
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.put<string>(url, product, headers).pipe(
@@ -56,7 +57,7 @@ export class ProductsService {
   }
 
   getUnidadesMedida(): void{
-    const url = this.baseUrl + "unidadesMedida/";
+    const url = this.baseUrl + "api/unidadesMedida/";
     const headers = { headers: this.getHeaders() };
 
     this.httpClient.get<UnidadMedida[]>(url, headers).subscribe(data=>{

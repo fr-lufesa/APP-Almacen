@@ -3,6 +3,7 @@ import { FormComponent } from '../stockin/components/form/form.component';
 import { IProduct, ProductsByCategory } from '../models/product_model';
 import { ModalController } from '@ionic/angular';
 import { ProductsService } from '../services/products.service';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-search',
@@ -19,6 +20,7 @@ export class SearchPage implements OnInit {
   filteredProducts: ProductsByCategory = {};
   searchTerm: string = '';
   empresa = localStorage.getItem('empresa');
+  urlBase = environment.url
 
   ngOnInit() {
     this.productService.products$.subscribe(products => {

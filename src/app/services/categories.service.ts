@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Category } from '../models/category_model';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class CategoriesService {
 
   private readonly httpClient = inject(HttpClient);
   readonly categorias = signal<Category[]>([]);
-  urlBase: string = "http://192.168.0.174:8000/api";
+  urlBase: string = environment.url;
 
   getHeaders(): HttpHeaders {
     const empresa = localStorage.getItem('empresa') || 'inova';
@@ -18,7 +19,7 @@ export class CategoriesService {
   }
 
   getCategories(): void{
-    const url = this.urlBase + "/categories/";
+    const url = this.urlBase + "api/categories/";
     const headers = { headers: this.getHeaders() };
 
     this.httpClient.get<Category[]>(url, headers).subscribe(data=>{

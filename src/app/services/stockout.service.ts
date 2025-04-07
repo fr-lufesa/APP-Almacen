@@ -4,6 +4,7 @@ import { StockoutRequest } from '../models/stockout_model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { ProductsService } from './products.service';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class StockoutService {
 
   // Exposición pública del carrito (readonly)
   readonly cart = computed(() => this.productsOut());
-  urlBase: string = "http://192.168.0.174:8000/api";
+  urlBase: string = environment.url;
 
   getHeaders(): HttpHeaders {
     const empresa = localStorage.getItem('empresa') || 'inova';
@@ -62,7 +63,7 @@ export class StockoutService {
   // }
 
   stockOutProduct(item: StockoutRequest): Observable<any>{
-    const url = this.urlBase + "/salidas/";
+    const url = this.urlBase + "api/salidas/";
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.post<any>(url, item, headers).pipe(

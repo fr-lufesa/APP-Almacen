@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { FormComponent } from './components/form/form.component';
 import { ProductsService } from '../services/products.service';
 import { IProduct, ProductsByCategory } from '../models/product_model';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-stockin',
@@ -19,6 +20,8 @@ export class StockinPage implements OnInit {
   filteredProducts: ProductsByCategory = {}
   searchTerm: string = '';
   empresa = localStorage.getItem('empresa');
+  urlBase = environment.url
+  
 
   ngOnInit() {
     this.productService.products$.subscribe(products => {

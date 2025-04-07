@@ -23,9 +23,9 @@
         <ion-item [button]="true" (click)="presentAlert(product)">
           <ion-avatar slot="start">
             @if (product.imagen) {
-            <img [src]="'http://192.168.0.174:8000/' + product.imagen" alt="" />
+            <img [src]="urlBase + product.imagen" alt="" />
             } @else {
-            <img src="http://192.168.0.174:8000/media/productos/default.jpg" alt="" />
+            <img [src]="urlBase + 'media/productos/default.jpg'" alt="" />
             }
           </ion-avatar>
 
