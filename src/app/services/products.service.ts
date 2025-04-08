@@ -12,9 +12,8 @@ export class ProductsService {
   private readonly httpClient = inject(HttpClient);
 
   private productsSubject = new BehaviorSubject<ProductsByCategory>({});
-  private baseUrl = environment.url;
+  readonly urlBase: string = environment.url;  
   readonly unidadesMedida = signal<UnidadMedida[]>([]);
-  
   products$ = this.productsSubject.asObservable();
 
   getHeaders(): HttpHeaders {
@@ -23,7 +22,7 @@ export class ProductsService {
   }
 
   setNewProduct(product: IProduct): Observable<any> {
-    const url = this.baseUrl + 'api/product/';
+    const url = this.urlBase + 'api/product/';
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.post<any>(url, product, headers).pipe(
@@ -33,7 +32,7 @@ export class ProductsService {
   }
 
   get_products(): void {
-    const url = this.baseUrl + 'api/products/';
+    const url = this.urlBase + 'api/products/';
     const headers = { headers: this.getHeaders() };
 
     this.httpClient.get<ProductsByCategory>(url, headers)
@@ -41,7 +40,7 @@ export class ProductsService {
   }
 
   stockIn(product: IStockin): Observable<UpdateStockResponse> {
-    const url = this.baseUrl + 'api/products/update_stock';
+    const url = this.urlBase + 'api/products/update_stock';
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.post<UpdateStockResponse>(url, product, headers).pipe(
@@ -49,19 +48,31 @@ export class ProductsService {
   }
 
   editProduct(product: IProduct): Observable<string> {
-    const url = this.baseUrl + 'api/products/' + product.idProducto;
+    const url = this.urlBase + 'api/products/' + product.idProducto;
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.put<string>(url, product, headers).pipe(
       tap(() => this.get_products()));
   }
 
-  getUnidadesMedida(): void{
-    const url = this.baseUrl + "api/unidadesMedida/";
+  getUnidadesMedida(): void {    
+    const url = this.urlBase + "api/unidadesMedida/";
     const headers = { headers: this.getHeaders() };
 
-    this.httpClient.get<UnidadMedida[]>(url, headers).subscribe(data=>{
+    this.httpClient.get<UnidadMedida[]>(url, headers).subscribe(data => {
       this.unidadesMedida.set(data);
     });
+
+    console.log("🚨 URL final usada:", url);
+
+  }
+
+  deleteProduct(idProduct: number) {
+    const url = this.urlBase + `api/productos/${idProduct}`;
+    const headers = { headers: this.getHeaders() };
+
+    return this.httpClient.delete<{mensaje: string}>(url, headers).pipe(
+      tap(() => this.get_products()));
+
   }
 }

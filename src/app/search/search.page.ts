@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormComponent } from '../stockin/components/form/form.component';
 import { IProduct, ProductsByCategory } from '../models/product_model';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { ProductsService } from '../services/products.service';
 import { environment } from 'src/environments/environment.prod';
 
@@ -15,6 +15,7 @@ export class SearchPage implements OnInit {
 
   private readonly productService = inject(ProductsService);
   private readonly modalCtrl = inject(ModalController);
+  private readonly alertCtrl = inject(AlertController);
 
   products: ProductsByCategory = {};
   filteredProducts: ProductsByCategory = {};
@@ -85,5 +86,27 @@ export class SearchPage implements OnInit {
 
   ionViewWillEnter(){
     this.empresa = localStorage.getItem('empresa');
+  }
+
+  deleteProduct(idProduct: number){
+    this.productService.deleteProduct(idProduct).subscribe({
+      next: (res) => {
+        this.showAlert(res.mensaje);
+      },
+      error: (err) => {
+        console.error('Error al eliminar el producto', err);
+      }
+    })
+  }
+
+  async showAlert(msg: string, err?: any) {
+    const alert = await this.alertCtrl.create({
+      header: msg,
+      message: err,
+      cssClass: 'alert-styles',
+      buttons: ['Aceptar'],
+    });
+
+    await alert.present();
   }
 }

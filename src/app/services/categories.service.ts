@@ -11,7 +11,7 @@ export class CategoriesService {
 
   private readonly httpClient = inject(HttpClient);
   readonly categorias = signal<Category[]>([]);
-  urlBase: string = environment.url;
+  readonly urlBase: string = environment.url;
 
   getHeaders(): HttpHeaders {
     const empresa = localStorage.getItem('empresa') || 'inova';
@@ -24,6 +24,7 @@ export class CategoriesService {
 
     this.httpClient.get<Category[]>(url, headers).subscribe(data=>{
       this.categorias.set(data);
+
     });
   }
 }
