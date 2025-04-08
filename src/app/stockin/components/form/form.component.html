@@ -10,7 +10,7 @@
 <ion-content class="ion-padding" [fullscreen]="true" scroll="true" style="overflow-y: auto!important;">
   <form [formGroup]="productForm" (ngSubmit)="submit()" style="text-align: center;">
 
-    <img [src]="'http://192.168.0.174:8000/' + product.imagen" alt="" width="50%">
+    <img [src]="urlBase + product.imagen" alt="" width="50%">
 
     <ion-item>
       <ion-label position="stacked">Nombre</ion-label>

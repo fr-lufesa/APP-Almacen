@@ -5,6 +5,7 @@ import { IProduct, IStockin } from 'src/app/models/product_model';
 import { CategoriesService } from 'src/app/services/categories.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { Camera, CameraResultType } from '@capacitor/camera';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-form',
@@ -38,6 +39,7 @@ export class FormComponent implements OnInit {
   categories = this.categoriesService.categorias;
   unidadesMedida = this.productService.unidadesMedida;
   imageLoaded: boolean = false;
+  urlBase = environment.url
 
   ngOnInit() {
     if (this.isNew || this.isEdit) {
