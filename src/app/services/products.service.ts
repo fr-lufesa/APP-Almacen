@@ -14,7 +14,7 @@ export class ProductsService {
   private productsSubject = new BehaviorSubject<ProductsByCategory>({});
   private baseUrl = environment.url;
   readonly unidadesMedida = signal<UnidadMedida[]>([]);
-  
+
   products$ = this.productsSubject.asObservable();
 
   getHeaders(): HttpHeaders {
@@ -56,12 +56,21 @@ export class ProductsService {
       tap(() => this.get_products()));
   }
 
-  getUnidadesMedida(): void{
+  getUnidadesMedida(): void {
     const url = this.baseUrl + "api/unidadesMedida/";
     const headers = { headers: this.getHeaders() };
 
-    this.httpClient.get<UnidadMedida[]>(url, headers).subscribe(data=>{
+    this.httpClient.get<UnidadMedida[]>(url, headers).subscribe(data => {
       this.unidadesMedida.set(data);
     });
+  }
+
+  deleteProduct(idProduct: number) {
+    const url = this.baseUrl + `api/productos/${idProduct}`;
+    const headers = { headers: this.getHeaders() };
+
+    return this.httpClient.delete<{mensaje: string}>(url, headers).pipe(
+      tap(() => this.get_products()));
+
   }
 }

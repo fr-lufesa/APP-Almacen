@@ -24,6 +24,7 @@ export class CategoriesService {
 
     this.httpClient.get<Category[]>(url, headers).subscribe(data=>{
       this.categorias.set(data);
+      
     });
   }
 }
