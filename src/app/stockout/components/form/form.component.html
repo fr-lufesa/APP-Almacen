@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Datos del producto</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cerrarModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item disabled="true">
+    <ion-label position="stacked">Nombre</ion-label>
+    <ion-input [value]="productOut.nombre" disabled></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Cantidad</ion-label>
+    <ion-input type="number" [(ngModel)]="cantidad" min="1" max="10000"></ion-input>
+  </ion-item>
+
+  <div class="autocomplete-wrapper">
+    <!-- Input con ngModel + filtro -->
+    <ion-item>
+      <ion-label position="stacked">PPTO</ion-label>
+      <ion-input
+        [(ngModel)]="selectedPPTO"
+        (ionInput)="filtrarPptos($event)"
+        placeholder="Selecciona PPTO"
+        type="text"
+      ></ion-input>
+    </ion-item>
+  
+    <!-- Dropdown debajo del input -->
+    <div class="autocomplete-dropdown" *ngIf="mostrarDropdown && pptoFiltrado.length > 0">
+      <ion-list>
+        <ion-item
+          *ngFor="let item of pptoFiltrado"
+          (click)="seleccionarPpto(item)"
+          button
+        >
+          {{ item }}
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+  
+  <ion-button expand="full" (click)="guardar()">Aceptar</ion-button>
+</ion-content>

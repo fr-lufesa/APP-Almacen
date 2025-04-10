@@ -24,51 +24,16 @@ export class StockoutService {
     return new HttpHeaders({ 'x-empresa': empresa });
   }
 
-  // Agregar producto al carrito (o actualizar cantidad si ya existe)
-  // addProduct(producto: ProductStockOut) {
-  //   const actual = this.productsOut();
-  //   const index = actual.findIndex(p => p.idProducto === producto.idProducto);
-
-  //   console.log("Información actual de productos en cart: ", actual);
-  //   console.warn("Producto encontrado en el indice: ", index);
-
-  //   if (index > -1) {
-  //     const actualizado = [...actual];
-  //     actualizado[index] = {
-  //       ...actualizado[index],
-  //       cantidad: actualizado[index].cantidad + producto.cantidad
-  //     };
-  //     this.productsOut.set(actualizado);
-  //   } else {
-  //     this.productsOut.set([...actual, producto]);
-  //   }
-
-  //   console.log("Lista actual: ", this.productsOut());
-  // }
-
-  // // Quitar producto del carrito
-  // quitProduct(idProducto: number) {
-  //   const actual = this.productsOut().filter(p => p.idProducto !== idProducto);
-  //   this.productsOut.set(actual);
-  // }
-
-  // // Limpiar todo el carrito
-  // cleanCart() {
-  //   this.productsOut.set([]);
-  // }
-
-  // // Obtener un producto específico (opcional)
-  // getProduct(idProducto: number): ProductStockOut | undefined {
-  //   return this.productsOut().find(p => p.idProducto === idProducto);
-  // }
-
   stockOutProduct(item: StockoutRequest): Observable<any>{
     const url = this.urlBase + "api/salidas/";
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.post<any>(url, item, headers).pipe(
       tap(() => this.productsService.get_products()));
+  }
 
+  getPPTOS(): Observable<string[]>{
+    return this.httpClient.get<string[]>(this.urlBase + 'pptos');
   }
 
 }

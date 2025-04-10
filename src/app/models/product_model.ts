@@ -20,6 +20,7 @@ export interface ProductStockOut {
     idProducto: number;
     nombre: string;
     cantidad: number;
+    PPTO: string;
 }
 
 export interface IStockin {
