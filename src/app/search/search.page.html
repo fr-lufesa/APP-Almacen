@@ -40,7 +40,7 @@
           <ion-button slot="end" color="light" (click)="editProduct(product)">
             <ion-icon slot="icon-only" name="pencil" style="color: rgb(243, 243, 99);"></ion-icon>
           </ion-button>
-          <ion-button slot="end" (click)="deleteProduct(product.idProducto)">
+          <ion-button slot="end" (click)="deleteProduct(product.idProducto!)">
             <ion-icon slot="icon-only" name="trash" style="color: var(--ion-color-red);"></ion-icon>
           </ion-button>
         </ion-item>

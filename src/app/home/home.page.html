@@ -37,9 +37,20 @@
     <ion-card style="width: 60%;" button="true">
       <ion-card-header>
         <ion-card-title>
-          Últimos movimientos
+          Añadir entradas
         </ion-card-title>
       </ion-card-header>
+      <ion-card-content>
+        <!-- <ion-list> -->
+          @for (item of items; track $index) {
+            <ion-item button="true" lines="none" style="margin-bottom: .5rem; border-radius: 5px;" (click)="stockin(item)">               
+              <i class="bi bi-box-seam-fill"></i>
+              <ion-label>{{ item.nombre | titlecase }}</ion-label>
+              <ion-label> <span style="font-size: small;">Cantidad:</span> {{ item.cantidad }}</ion-label>
+            </ion-item>
+          }            
+        <!-- </ion-list> -->
+      </ion-card-content>
     </ion-card>
   </div>
 </ion-content>

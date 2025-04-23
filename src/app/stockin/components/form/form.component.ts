@@ -170,7 +170,7 @@ export class FormComponent implements OnInit {
     this.trimFormValues(this.productForm);
 
     let stockin: IStockin = {
-      idProducto: this.product!.idProducto,
+      idProducto: this.product!.idProducto!,
       cantidad: this.productForm.value.cantidad,
       costoUnitario: this.productForm.value.costoUnitario,
       proveedor: this.productForm.value.proveedor,

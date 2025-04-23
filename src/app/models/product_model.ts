@@ -1,18 +1,16 @@
 export interface IProduct {
-    idProducto: number;
+    idProducto?: number;
     nombre: string;
     idCategoria?: number;
-    idUnidad: number;
-    // color?: string;
+    idUnidad: number;    
     stockMinimo: number;
     imagen?: string;
-    fechaCreacion?: string;
-    // usuario?: string;
+    fechaCreacion?: string;    
     stock?: number;
     CostoUnitario?: number;
 }
 
-export interface UpdateStockResponse {
+export interface StockinResponse {
     msg: string,
 }
 
@@ -40,4 +38,13 @@ export interface UnidadMedida{
 
 export type ProductsByCategory = {
     [categoria: string]: IProduct[];
-  };
+};
+
+export interface ProducsFromRequis{
+    id: number,
+    nombre: string,
+    cantidad: number,
+    costoUnitario: number,
+    proveedor: string
+
+}
