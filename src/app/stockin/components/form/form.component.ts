@@ -182,7 +182,7 @@ export class FormComponent implements OnInit {
         this.showAlert(res.msg);
       },
       error: (err) => {
-        console.error('Error al actualizar stock', err);
+        console.error(err);
       }
     })
     this.modalCtrl.dismiss();

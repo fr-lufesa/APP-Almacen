@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ProductsService } from '../services/products.service';
-import { IProduct, IStockin, ProducsFromRequis } from '../models/product_model';
+import { IProduct, IProductRequis, IResponseAddRequiOP, IStockin, ProducsFromRequis } from '../models/product_model';
 import { AlertController } from '@ionic/angular';
 
 @Component({
@@ -11,7 +11,7 @@ import { AlertController } from '@ionic/angular';
 })
 
 export class HomePage implements OnInit {
-  
+
   private readonly productsService = inject(ProductsService);
   private readonly alertCtrl = inject(AlertController);
 
@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
   items: ProducsFromRequis[] = []
 
   ngOnInit(): void {
-    this.productsService.get_info_from_requis().subscribe(resp=>{
+    this.productsService.get_info_from_requis().subscribe(resp => {
       this.items = [...resp];
       console.log(this.items)
     })
@@ -43,7 +43,7 @@ export class HomePage implements OnInit {
 
     this.productsService.get_products();
 
-    this.productsService.get_info_from_requis().subscribe(resp=>{
+    this.productsService.get_info_from_requis().subscribe(resp => {
       this.items = [...resp];
       console.log(this.items)
     })
@@ -53,17 +53,25 @@ export class HomePage implements OnInit {
     this.showAlert('¿Estás seguro que deseas añadir esta entrada?', item);
   }
 
-  async showAlert(msg: string, item: IProduct) {
+  async showAlert(msg: string, item: ProducsFromRequis) {
 
     const alertButtons = [
       {
         text: 'Aceptar',
         role: 'ok',
         handler: () => {
-          this.productsService.verify_product(item).subscribe(resp=>{
-            window.alert(resp);
+          this.productsService.verify_product(item).subscribe({
+            next: (resp: IResponseAddRequiOP) => {
+              window.alert(resp.mensaje);
+              this.productsService.get_info_from_requis().subscribe(resp=>{
+                this.items = [...resp];
+              })
+            },
+            error: (err)=>{
+              window.alert(err.error.detail);
+              console.error("Error: ", err)
+            }
 
-            this.items = [...this.items.filter(product=> product.nombre != item.nombre)]
           })
         },
       },
@@ -71,9 +79,9 @@ export class HomePage implements OnInit {
         text: 'Cancelar',
         role: 'cancel',
         handler: () => {
-          
+
         },
-      }    
+      }
     ]
 
     const alert = await this.alertCtrl.create({

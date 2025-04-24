@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { IStockin, IProduct, UnidadMedida, ProductsByCategory, StockinResponse, ProducsFromRequis } from '../models/product_model';
-import { BehaviorSubject, catchError, map, Observable, switchMap, tap, throwError } from 'rxjs';
+import { IStockin, IProduct, UnidadMedida, ProductsByCategory, StockinResponse, ProducsFromRequis, IProductRequis, IResponseAddRequiOP } from '../models/product_model';
+import { BehaviorSubject, Observable, tap} from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
@@ -76,55 +76,27 @@ export class ProductsService {
 
   }
 
-  verify_product(productParam: any): Observable<string> {
-    const url = this.urlBase + `api/products/exist_product/${productParam.nombre}`;
+  verify_product(productParam: ProducsFromRequis): Observable<IResponseAddRequiOP> {
+
+    const url = this.urlBase + `api/almacen/set_product_from_requis/`;
     const headers = { headers: this.getHeaders() };
-  
-    return this.httpClient.get<number>(url, headers).pipe(
-      switchMap(idProducto => {
-        const stockin: IStockin = {
-          idProducto: idProducto,
-          cantidad: productParam.cantidad,
-          costoUnitario: productParam.costoUnitario,
-          proveedor: productParam.proveedor
-        };
-        return this.stockIn(stockin).pipe(
-          map(() => "Stock registrado")
-        );
-      }),
-      catchError(err => {
-        if (err.status === 404) {
+    
+    const product: IProductRequis = {
+      idRequis: productParam.id,
+      idUnidad: 1,
+      nombre: productParam.nombre,
+      stockMinimo: 10,
+      imagen: '',
+      CostoUnitario: productParam.costoUnitario,
+      idCategoria: 1,
+      cantidad: productParam.cantidad,      
+      proveedor: productParam.proveedor
+    };
 
-          const product: IProduct = {
-            idUnidad: 1,
-            nombre: productParam.nombre,
-            stockMinimo: 10,
-            imagen: '',
-            CostoUnitario: productParam.costoUnitario,
-            idCategoria: 1,            
-          }
-
-          return this.setNewProduct(product).pipe(
-            switchMap(resp => {
-              const stockin: IStockin = {
-                idProducto: resp.idProducto!,
-                cantidad: productParam.cantidad,
-                costoUnitario: productParam.costoUnitario,
-                proveedor: productParam.proveedor
-              };
-              return this.stockIn(stockin).pipe(
-                map(() => "Producto creado y stock registrado")
-              );
-            })
-          );
-        }
-        return throwError(() => new Error("Error desconocido: " + err.message));
-      })
-    );
+    return this.httpClient.post<IResponseAddRequiOP>(url, product, headers);    
   }
 
-  get_info_from_requis(): Observable<ProducsFromRequis[]>
-  {
+  get_info_from_requis(): Observable<ProducsFromRequis[]> {
     const url = this.urlBase + `api/almacen/get_info_from_requis/`;
     const headers = { headers: this.getHeaders() };
 

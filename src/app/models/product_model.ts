@@ -48,3 +48,17 @@ export interface ProducsFromRequis{
     proveedor: string
 
 }
+
+export interface IProductRequis extends IProduct{
+    idRequis: number,
+    cantidad: number,
+    proveedor: string,
+    CostoUnitario: number
+}
+
+export interface IResponseAddRequiOP
+{
+    mensaje: string,
+    idProducto?: number,
+    idEntrada: number
+}

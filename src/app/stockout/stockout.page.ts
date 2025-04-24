@@ -86,67 +86,7 @@ export class StockoutPage implements OnInit {
         next: (response) => this.openAlert('Exito', response.msg),
         error: err => this.openAlert('Error', err),
       });
-    }
-
-    // const opciones = [
-    //   { id: 1, nombre: 'Opción A' },
-    //   { id: 2, nombre: 'Opción B' },
-    //   { id: 3, nombre: 'Opción C' }
-    // ];
-
-    // const inputs: AlertInput[] = [
-    //   {
-    //     type: 'text',
-    //     name: 'nombre',
-    //     value: productOut.nombre,
-    //     disabled: true,
-    //   },
-    //   {
-    //     type: 'number',
-    //     name: 'cantidad',
-    //     placeholder: 'Cantidad',
-    //     min: 1,
-    //     max: 10000,
-    //   },
-    //   {
-    //     type: 'text', // 'input' no es un tipo válido; se usa 'text'
-    //     name: 'PPTO',
-    //     placeholder: 'Selecciona PPTO',
-    //   },
-    //   ...opciones.map(opcion => ({
-    //     type: 'radio' as const,
-    //     name: 'tipo', // importante: todos los radios deben compartir el mismo "name"
-    //     label: opcion.nombre,
-    //     value: opcion.id.toString()
-    //   }))
-    // ];      
-
-    // const alert = await this.alertController.create({
-    //   header: 'Salida',
-    //   subHeader: 'Ingresa la cantidad que va a salir:',
-    //   inputs,
-    //   cssClass: 'alert-styles',
-    //   buttons: [
-    //     {
-    //       text: 'Añadir',
-    //       role: 'confirm',
-    //       handler: (data) => {
-    //         this.stockOutProduct.idProducto = productOut.idProducto; // Convertir a número si es necesario
-    //         this.stockOutProduct.cantidad = Number(data.cantidad); // Convertir a número si es necesario
-    //         // this.stockOutProduct.usuario = data.usuario.trim();
-
-    //         this.stockOutService.stockOutProduct(this.stockOutProduct).subscribe({
-    //           next: (response) => this.openAlert('Exito', response.msg),
-    //           error: err => this.openAlert('Error', err.error.detail),
-    //         });
-    //       },
-    //     }
-    //   ],
-    // });
-
-    // await alert.present();
-    // console.log("Stock out: ", this.cart().length);
-
+    } 
   }
 
   async openCart() {
