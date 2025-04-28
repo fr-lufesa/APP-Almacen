@@ -25,7 +25,7 @@ export class StockoutService {
   }
 
   stockOutProduct(item: StockoutRequest): Observable<any>{
-    const url = this.urlBase + "api/stockout/";
+    const url = this.urlBase + "/api/stockout/";
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.post<any>(url, item, headers).pipe(
