@@ -10,7 +10,7 @@
     (ionClear)="resetList()"></ion-searchbar>
 
   @if (filteredProducts) {
-  <ion-accordion-group expand="multiple" style="width: 95%!important; margin: 0 auto!important;">
+  <ion-accordion-group expand="multiple" style="width: 95%!important; margin: 0 auto!important;" [value]="expandedCategories">
     @for (category of filteredProducts | keyvalue; track $index) {
     <ion-accordion [value]="category.key">
 

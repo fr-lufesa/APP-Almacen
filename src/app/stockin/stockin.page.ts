@@ -9,36 +9,35 @@ import { environment } from 'src/environments/environment.prod';
   selector: 'app-stockin',
   templateUrl: './stockin.page.html',
   styleUrls: ['./stockin.page.scss'],
-  standalone: false
+  standalone: false,
 })
 export class StockinPage implements OnInit {
-
   private readonly modalCtrl = inject(ModalController);
   private readonly productService = inject(ProductsService);
 
-  products: ProductsByCategory = {}
-  filteredProducts: ProductsByCategory = {}
+  products: ProductsByCategory = {};
+  filteredProducts: ProductsByCategory = {};
   searchTerm: string = '';
   empresa = localStorage.getItem('empresa');
-  urlBase = environment.url
-  
+  urlBase = environment.url;
+  expandedCategories: string[] = [];
 
   ngOnInit() {
-    this.productService.products$.subscribe(products => {
+    this.productService.products$.subscribe((products) => {
       this.products = products;
       this.filteredProducts = this.products;
-    })
+    });
 
     this.productService.get_products();
-
   }
-
 
   searchProducts(): void {
     const term = this.searchTerm.toLowerCase();
 
-    this.filteredProducts = Object.entries(this.products).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
-      const filtrados = productos.filter(product =>
+    this.filteredProducts = Object.entries(
+      this.products
+    ).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
+      const filtrados = productos.filter((product) =>
         product.nombre.toLowerCase().includes(term)
       );
 
@@ -48,19 +47,21 @@ export class StockinPage implements OnInit {
 
       return acc;
     }, {});
+
+    this.expandedCategories = Object.keys(this.filteredProducts);
   }
 
   resetList(): void {
-    this.filteredProducts = this.products
+    this.filteredProducts = this.products;
   }
 
   async editStock(product: IProduct) {
     const modal = await this.modalCtrl.create({
       component: FormComponent,
-      breakpoints: [0, .95],
-      initialBreakpoint: .95,
-      componentProps: { product, isStockin: true }
-    })
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+      componentProps: { product, isStockin: true },
+    });
 
     await modal.present();
 

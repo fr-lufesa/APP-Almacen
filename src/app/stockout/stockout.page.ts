@@ -1,5 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { IProduct, ProductsByCategory, ProductStockOut } from '../models/product_model';
+import {
+  IProduct,
+  ProductsByCategory,
+  ProductStockOut,
+} from '../models/product_model';
 import { AlertController, AlertInput, ModalController } from '@ionic/angular';
 import { ProductsService } from '../services/products.service';
 import { StockoutService } from '../services/stockout.service';
@@ -12,17 +16,16 @@ import { FormComponent } from './components/form/form.component';
   selector: 'app-stockout',
   templateUrl: './stockout.page.html',
   styleUrls: ['./stockout.page.scss'],
-  standalone: false
+  standalone: false,
 })
 export class StockoutPage implements OnInit {
-
   private readonly productService = inject(ProductsService);
   private readonly alertController = inject(AlertController);
   private readonly stockOutService = inject(StockoutService);
   private readonly modalCtrl = inject(ModalController);
 
-  products: ProductsByCategory = {}
-  filteredProducts: ProductsByCategory = {}
+  products: ProductsByCategory = {};
+  filteredProducts: ProductsByCategory = {};
   searchTerm: string = '';
   stockOutProduct: StockoutRequest = {
     idProducto: 0,
@@ -32,23 +35,25 @@ export class StockoutPage implements OnInit {
   };
   cart = this.stockOutService.cart;
   empresa = localStorage.getItem('empresa');
-  urlBase = environment.url
+  urlBase = environment.url;
+  expandedCategories: string[] = [];
 
   ngOnInit() {
-    this.productService.products$.subscribe(products => {
+    this.productService.products$.subscribe((products) => {
       this.products = products;
       this.filteredProducts = this.products;
-    })
+    });
 
     this.productService.get_products();
   }
 
-
   searchProducts(): void {
     const term = this.searchTerm.toLowerCase();
 
-    this.filteredProducts = Object.entries(this.products).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
-      const filtrados = productos.filter(product =>
+    this.filteredProducts = Object.entries(
+      this.products
+    ).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
+      const filtrados = productos.filter((product) =>
         product.nombre.toLowerCase().includes(term)
       );
 
@@ -58,19 +63,20 @@ export class StockoutPage implements OnInit {
 
       return acc;
     }, {});
+
+    this.expandedCategories = Object.keys(this.filteredProducts);
   }
 
   resetList(): void {
-    this.filteredProducts = this.products
+    this.filteredProducts = this.products;
   }
 
   async presentAlert(productOut: IProduct) {
-
     const modal = await this.modalCtrl.create({
       component: FormComponent,
       componentProps: {
-        productOut: productOut      
-      }
+        productOut: productOut,
+      },
     });
 
     await modal.present();
@@ -78,23 +84,23 @@ export class StockoutPage implements OnInit {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-      console.log('Datos recibidos:', data);     
+      console.log('Datos recibidos:', data);
 
       this.stockOutProduct = data;
 
       this.stockOutService.stockOutProduct(this.stockOutProduct).subscribe({
         next: (response) => this.openAlert('Exito', response.msg),
-        error: err => this.openAlert('Error', err),
+        error: (err) => this.openAlert('Error', err),
       });
-    } 
+    }
   }
 
   async openCart() {
     const modal = await this.modalCtrl.create({
       component: CartComponent,
-      breakpoints: [0, .95],
-      initialBreakpoint: .95,
-    })
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+    });
 
     await modal.present();
   }
@@ -102,8 +108,8 @@ export class StockoutPage implements OnInit {
   async openAlert(header: string, subheader: string) {
     const alert = await this.alertController.create({
       header: header,
-      subHeader: subheader
-    })
+      subHeader: subheader,
+    });
 
     await alert.present();
   }
