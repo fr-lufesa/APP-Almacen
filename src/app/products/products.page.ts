@@ -4,7 +4,6 @@ import { IProduct, ProductsByCategory } from '../models/product_model';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ProductsService } from '../services/products.service';
 import { environment } from 'src/environments/environment.prod';
-import { MovementsComponent } from './components/movements/movements.component';
 
 @Component({
   selector: 'app-search',
@@ -111,14 +110,4 @@ export class ProductsPage implements OnInit {
     await alert.present();
   }
 
-  async getAllStock(idProduct: number) {
-     const modal = await this.modalCtrl.create({
-      component: MovementsComponent,
-      breakpoints: [0, 0.95],
-      initialBreakpoint: 0.95,
-      componentProps: { idProduct },
-    });
-
-    await modal.present();
-  }
 }
