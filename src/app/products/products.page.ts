@@ -4,15 +4,15 @@ import { IProduct, ProductsByCategory } from '../models/product_model';
 import { AlertController, ModalController } from '@ionic/angular';
 import { ProductsService } from '../services/products.service';
 import { environment } from 'src/environments/environment.prod';
+import { MovementsComponent } from './components/movements/movements.component';
 
 @Component({
   selector: 'app-search',
-  templateUrl: './search.page.html',
-  styleUrls: ['./search.page.scss'],
-  standalone: false
+  templateUrl: './products.page.html',
+  styleUrls: ['./products.page.scss'],
+  standalone: false,
 })
-export class SearchPage implements OnInit {
-
+export class ProductsPage implements OnInit {
   private readonly productService = inject(ProductsService);
   private readonly modalCtrl = inject(ModalController);
   private readonly alertCtrl = inject(AlertController);
@@ -21,45 +21,46 @@ export class SearchPage implements OnInit {
   filteredProducts: ProductsByCategory = {};
   searchTerm: string = '';
   empresa = localStorage.getItem('empresa');
-  urlBase = environment.url
+  urlBase = environment.url;
 
   ngOnInit() {
-    this.productService.products$.subscribe(products => {
+    this.productService.products$.subscribe((products) => {
       this.products = products;
       this.filteredProducts = this.products;
-    })
+    });
 
     this.productService.get_products();
   }
 
   searchProducts(): void {
     const term = this.searchTerm.toLowerCase();
-  
-    this.filteredProducts = Object.entries(this.products).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
-      const filtrados = productos.filter(product =>
+
+    this.filteredProducts = Object.entries(
+      this.products
+    ).reduce<ProductsByCategory>((acc, [categoria, productos]) => {
+      const filtrados = productos.filter((product) =>
         product.nombre.toLowerCase().includes(term)
       );
-  
+
       if (filtrados.length > 0) {
         acc[categoria] = filtrados;
       }
-  
+
       return acc;
     }, {});
   }
-  
 
   resetList(): void {
-    this.filteredProducts = this.products
+    this.filteredProducts = this.products;
   }
 
   async addProduct() {
     const modal = await this.modalCtrl.create({
       component: FormComponent,
-      breakpoints: [0, .95],
-      initialBreakpoint: .95,
-      componentProps: { isNew: true }
-    })
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+      componentProps: { isNew: true },
+    });
 
     modal.present();
   }
@@ -67,10 +68,10 @@ export class SearchPage implements OnInit {
   async editProduct(product: IProduct) {
     const modal = await this.modalCtrl.create({
       component: FormComponent,
-      breakpoints: [0, .95],
-      initialBreakpoint: .95,
-      componentProps: { product, isEdit: true }
-    })
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+      componentProps: { product, isEdit: true },
+    });
 
     await modal.present();
   }
@@ -84,19 +85,19 @@ export class SearchPage implements OnInit {
     return total;
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.empresa = localStorage.getItem('empresa');
   }
 
-  deleteProduct(idProduct: number){
+  deleteProduct(idProduct: number) {
     this.productService.deleteProduct(idProduct).subscribe({
       next: (res) => {
         this.showAlert(res.mensaje);
       },
       error: (err) => {
         console.error('Error al eliminar el producto', err);
-      }
-    })
+      },
+    });
   }
 
   async showAlert(msg: string, err?: any) {
@@ -108,5 +109,16 @@ export class SearchPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  async getAllStock(idProduct: number) {
+     const modal = await this.modalCtrl.create({
+      component: MovementsComponent,
+      breakpoints: [0, 0.95],
+      initialBreakpoint: 0.95,
+      componentProps: { idProduct },
+    });
+
+    await modal.present();
   }
 }

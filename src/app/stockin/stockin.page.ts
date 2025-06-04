@@ -21,6 +21,7 @@ export class StockinPage implements OnInit {
   empresa = localStorage.getItem('empresa');
   urlBase = environment.url;
   expandedCategories: string[] = [];
+  unidadesMedida = this.productService.unidadesMedida;
 
   ngOnInit() {
     this.productService.products$.subscribe((products) => {
@@ -73,5 +74,10 @@ export class StockinPage implements OnInit {
 
   ionViewWillEnter() {
     this.empresa = localStorage.getItem('empresa');
+  }
+
+  get_unidad_medida(id: number) {
+    const unidad = this.unidadesMedida().find((udm) => udm.idUnidad === id);
+    return unidad ? unidad.nombre : 'Desconocida';
   }
 }

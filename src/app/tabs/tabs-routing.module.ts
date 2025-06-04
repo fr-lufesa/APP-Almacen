@@ -12,7 +12,7 @@ const routes: Route[] = [
     children: [
       {
         path: 'search',
-        loadChildren: () => import('../search/search.module').then(m => m.SearchPageModule)
+        loadChildren: () => import('../products/products.module').then(m => m.ProductsPageModule)
       },
       {
         path: 'stockin',

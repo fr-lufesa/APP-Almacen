@@ -32,6 +32,7 @@
             {{ product.nombre }}
             <p style="font-size: small;">Productos disponibles: {{ product.stock }}</p>
             <p>{{ product.CostoUnitario | currency }}</p>
+            <p>Unidad de medida: {{ get_unidad_medida(product.idUnidad) }}</p>
           </ion-label>
 
           <!-- <ion-button slot="end" color="light">

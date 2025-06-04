@@ -73,19 +73,19 @@
     </ion-item> -->
 
     @if (isStockin || isStockout) {
-    <ion-item>
-      <ion-label position="stacked" required>Costo Unitario*</ion-label>
-      <ion-input type="number" formControlName="costoUnitario" required></ion-input>
+    <ion-item [disabled]="product.idCategoria === 6">
+      <ion-label position="stacked">Costo Unitario por {{ getNameUnidad() }}*</ion-label>
+      <ion-input type="number" formControlName="costoUnitario"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="stacked">Cantidad*</ion-label>
+      <ion-label position="stacked">Cantidad ({{ getNameUnidad() }})*</ion-label>
       <ion-input type="number" formControlName="cantidad" required></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label position="stacked">Proveedor</ion-label>
-      <ion-input formControlName="proveedor"></ion-input>
+      <ion-input formControlName="proveedor*" required></ion-input>
     </ion-item>
 
     }
