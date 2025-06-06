@@ -102,6 +102,7 @@ export class FormComponent implements OnInit {
       cantidad: [''],
       proveedor: [''],
       costoUnitario: [''],
+      fecha: []
       // usuario: [''],
     });
 
@@ -211,6 +212,7 @@ export class FormComponent implements OnInit {
       cantidad: this.productForm.value.cantidad,
       costoUnitario: this.productForm.value.costoUnitario || 0,
       proveedor: this.productForm.value.proveedor,
+      fecha: this.productForm.value.fecha
       // usuario: this.productForm.value.usuario,
     };
 

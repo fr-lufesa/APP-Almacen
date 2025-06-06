@@ -26,6 +26,7 @@ export interface IStockin {
   cantidad: number;
   costoUnitario: number;
   proveedor?: string;
+  fecha?: Date;
   usuario?: string;
 }
 

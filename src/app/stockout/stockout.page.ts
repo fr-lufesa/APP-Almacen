@@ -31,6 +31,7 @@ export class StockoutPage implements OnInit {
     idProducto: 0,
     cantidad: 0,
     ppto: '',
+    fecha: new Date()
     // usuario: ''
   };
   cart = this.stockOutService.cart;

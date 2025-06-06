@@ -19,6 +19,7 @@ export class FormComponent implements OnInit {
   selectedPPTO: string = '';
   pptoFiltrado: string[] = [];
   mostrarDropdown: boolean = false;
+  fecha!: Date;
 
 
   private readonly modalCtrl = inject(ModalController);
@@ -39,6 +40,7 @@ export class FormComponent implements OnInit {
     this.modalCtrl.dismiss({
       idProducto: this.productOut?.idProducto,
       cantidad: this.cantidad,
+      fecha: this.fecha,
       // usuario: 'JAVIER',
       ppto: this.selectedPPTO
     }, 'confirm');
