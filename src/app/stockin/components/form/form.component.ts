@@ -25,6 +25,7 @@ import { CategoriesService } from 'src/app/services/categories.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { environment } from 'src/environments/environment.prod';
+import { StockoutRequest } from 'src/app/models/stockout_model';
 
 @Component({
   selector: 'app-form',
@@ -74,6 +75,11 @@ export class FormComponent implements OnInit {
   submit() {
     if (!this.productForm.valid) return;
 
+    if (this.product.idProducto == 5 || this.product.idProducto == 6) {
+      this.saveProductoTerminado();
+      return;
+    }
+
     if (this.isEdit) {
       this.saveProduct();
       return;
@@ -102,7 +108,7 @@ export class FormComponent implements OnInit {
       cantidad: [''],
       proveedor: [''],
       costoUnitario: [''],
-      fecha: []
+      fecha: [],
       // usuario: [''],
     });
 
@@ -212,7 +218,7 @@ export class FormComponent implements OnInit {
       cantidad: this.productForm.value.cantidad,
       costoUnitario: this.productForm.value.costoUnitario || 0,
       proveedor: this.productForm.value.proveedor,
-      fecha: this.productForm.value.fecha
+      fecha: this.productForm.value.fecha,
       // usuario: this.productForm.value.usuario,
     };
 
@@ -221,7 +227,6 @@ export class FormComponent implements OnInit {
         this.showAlert(res.msg);
       },
       error: ({ error: { detail } }) => {
-        
         this.presentToast('bottom', 'danger', detail);
       },
     });
@@ -274,5 +279,22 @@ export class FormComponent implements OnInit {
       (udm) => udm.idUnidad === this.product.idUnidad
     );
     return unidad ? unidad.nombre : 'Desconocida';
+  }
+
+  saveProductoTerminado() {
+    if (!this.productForm.valid) return;
+
+    const stockOutProduct: StockoutRequest = {
+      idProducto: this.productForm.value.idProducto,
+      cantidad: this.productForm.value.cantidad,
+      ppto: '',
+      fecha: this.productForm.value.fecha,
+    };
+
+    this.productService
+      .set_producto_terminado(stockOutProduct)
+      .subscribe((resp) => {
+        console.log(resp);
+      });
   }
 }

@@ -13,6 +13,7 @@ import {
 } from '../models/product_model';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
+import { StockoutRequest } from '../models/stockout_model';
 
 @Injectable({
   providedIn: 'root',
@@ -127,5 +128,12 @@ export class ProductsService {
     const headers = { headers: this.getHeaders() };
 
     return this.httpClient.get<IStockMovement[]>(url, headers);
+  }
+
+  set_producto_terminado(data: StockoutRequest): Observable<string>{
+    const url = this.urlBase + `api/products/producto_terminado`;
+    const headers = { headers: this.getHeaders() };
+
+    return this.httpClient.post<string>(url, data, headers);
   }
 }
