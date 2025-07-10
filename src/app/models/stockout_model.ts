@@ -3,5 +3,6 @@ export interface StockoutRequest{
     cantidad: number
     ppto: string,
     fecha: Date
+    costoUnitario?: number
     // usuario: string  
 }

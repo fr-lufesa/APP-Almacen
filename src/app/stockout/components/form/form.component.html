@@ -18,6 +18,11 @@
     <ion-input type="number" [(ngModel)]="cantidad" min="1" max="10000"></ion-input>
   </ion-item>
 
+  <ion-item *ngIf="productOut.idCategoria == 6">
+    <ion-label position="stacked">Precio Venta</ion-label>
+    <ion-input type="number" [(ngModel)]="costoUnitario" min="1" max="10000"></ion-input>
+  </ion-item>
+
   <div class="autocomplete-wrapper">
     <!-- Input con ngModel + filtro -->
     <ion-item>

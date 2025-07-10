@@ -14,6 +14,7 @@ export class FormComponent implements OnInit {
   @Input() productOut!: IProduct;
   @Input() opciones: any[] = [];
 
+  costoUnitario: number = 0;
   cantidad: number = 0;
   listaPptos: string[] = [];
   selectedPPTO: string = '';
@@ -41,6 +42,7 @@ export class FormComponent implements OnInit {
       idProducto: this.productOut?.idProducto,
       cantidad: this.cantidad,
       fecha: this.fecha,
+      costoUnitario: this.costoUnitario || this.productOut.CostoUnitario,
       // usuario: 'JAVIER',
       ppto: this.selectedPPTO
     }, 'confirm');
