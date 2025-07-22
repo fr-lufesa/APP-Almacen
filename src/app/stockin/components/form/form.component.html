@@ -91,6 +91,9 @@
       <ion-label position="stacked">Fecha*</ion-label>
       <ion-input type="date" formControlName="fecha" required></ion-input>
     </ion-item>
+    <ion-item *ngIf="product.idCategoria === 6">
+      <ion-checkbox formControlName="saco_blanco">Usar Sacos Blancos</ion-checkbox>
+    </ion-item>
 
     }
     <!-- <ion-item>

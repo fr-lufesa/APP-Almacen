@@ -109,6 +109,7 @@ export class FormComponent implements OnInit {
       proveedor: [''],
       costoUnitario: [''],
       fecha: [],
+      saco_blanco: [false]
       // usuario: [''],
     });
 
@@ -284,17 +285,27 @@ export class FormComponent implements OnInit {
   saveProductoTerminado() {
     if (!this.productForm.valid) return;
 
+    console.warn("Saco Blanco" + this.productForm.value.saco_blanco);
+
     const stockOutProduct: StockoutRequest = {
-      idProducto: this.productForm.value.idProducto,
+      idProducto: this.productForm.value.idProducto || this.product.idProducto,
       cantidad: this.productForm.value.cantidad,
       ppto: '',
+      proveedor: this.productForm.value.proveedor,
       fecha: this.productForm.value.fecha,
+      saco_blanco: this.productForm.value.saco_blanco
     };
 
     this.productService
       .set_producto_terminado(stockOutProduct)
-      .subscribe((resp) => {
-        console.log(resp);
-      });
+      .subscribe({
+        next: (resp)=>{
+          this.showAlert(resp.msg);
+        },
+        error: ({ error: { detail } }) => {
+          this.presentToast('bottom', 'danger', detail);
+        },
+      })
+      this.modalCtrl.dismiss();
   }
 }

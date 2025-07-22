@@ -130,10 +130,10 @@ export class ProductsService {
     return this.httpClient.get<IStockMovement[]>(url, headers);
   }
 
-  set_producto_terminado(data: StockoutRequest): Observable<string>{
+  set_producto_terminado(data: StockoutRequest): Observable<any>{
     const url = this.urlBase + `api/products/producto_terminado`;
     const headers = { headers: this.getHeaders() };
 
-    return this.httpClient.post<string>(url, data, headers);
+    return this.httpClient.post<any>(url, data, headers);
   }
 }
