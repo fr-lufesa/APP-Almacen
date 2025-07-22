@@ -21,10 +21,10 @@ export class HomePage implements OnInit {
   items: ProducsFromRequis[] = []
 
   ngOnInit(): void {
-    this.productsService.get_info_from_requis().subscribe(resp => {
-      this.items = [...resp];
-      console.log(this.items)
-    })
+    // this.productsService.get_info_from_requis().subscribe(resp => {
+    //   this.items = [...resp];
+    //   console.log(this.items)
+    // })
   }
 
 
@@ -43,10 +43,10 @@ export class HomePage implements OnInit {
 
     this.productsService.get_products();
 
-    this.productsService.get_info_from_requis().subscribe(resp => {
-      this.items = [...resp];
-      console.log(this.items)
-    })
+    // this.productsService.get_info_from_requis().subscribe(resp => {
+    //   this.items = [...resp];
+    //   console.log(this.items)
+    // })
   }
 
   stockin(item: any) {
@@ -63,9 +63,9 @@ export class HomePage implements OnInit {
           this.productsService.verify_product(item).subscribe({
             next: (resp: IResponseAddRequiOP) => {
               window.alert(resp.mensaje);
-              this.productsService.get_info_from_requis().subscribe(resp=>{
-                this.items = [...resp];
-              })
+              // this.productsService.get_info_from_requis().subscribe(resp=>{
+              //   this.items = [...resp];
+              // })
             },
             error: (err)=>{
               window.alert(err.error.detail);
