@@ -75,7 +75,7 @@ export class FormComponent implements OnInit {
   submit() {
     if (!this.productForm.valid) return;
 
-    if (this.product.idProducto == 5 || this.product.idProducto == 6) {
+    if (this.product.idProducto == 2 || this.product.idProducto == 3 || this.product.idProducto == 29 || this.product.idProducto == 30) {
       this.saveProductoTerminado();
       return;
     }
